@@ -24,11 +24,14 @@ def preprocessing_en(text):
     # print("Text lemmatizer: ", lemma_list)
 
     # Removing stopwords and punctuation
-    stop_words = stopwords.words("english")
+    stopwords_verbs = ['say', 'get', 'go', 'know', 'may', 'need', 'like', 'make', 'see', 'want', 'come', 'take', 'use',
+                       'would', 'can']
+    stopwords_other = ['one', 'mr', 'bbc', 'image', 'getty', 'de', 'en', 'caption', 'also', 'copyright', 'something']
+    stop_words = stopwords.words("english") + stopwords_verbs + stopwords_other
     filtered_lemma_list = []
     for word in lemma_list:
         if word not in stop_words:
-            if word.isalpha():
+            if word.isalpha() and len(word) > 3:
                 filtered_lemma_list.append(word)
 
     # print("Text stopwords: ", filtered_lemma_list)

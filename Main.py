@@ -8,18 +8,27 @@ text4 = "I’m good, thanks."
 text5 = "Everything they do -- everything -- ends with a big hug, because Teletubbies love each other very much. “Biiiiiig Huuuuuug!”"
 text6 = "So sweet a kiss the golden sun gives not To those fresh morning drops upon the rose, As thy eye-beams, when their fresh rays have smote The night of dew that on my cheeks down flows: Nor shines the silver moon one half so bright Through the transparent bosom of the deep, As doth thy face through tears of mine give light; Thou shinest in every tear that I do weep: No drop but as a coach doth carry thee; So ridest thou triumphing in my woe. Do but behold the tears that swell in me, And they thy glory through my grief will show: But do not love thyself; then thou wilt keep My tears for glasses, and still make me weep. O queen of queens! how far dost thou excel, No thought can think, nor tongue of mortal tell. How shall she know my griefs? I'll drop the paper: Sweet leaves, shade folly. Who is he comes here?"
 
-text = text3
+text = text5
 
-print("Test with sentiment_analysis_en")
+print("-------------------------------------------")
+
+print("Frase in ingresso: ", text)
+
+print("-------------------------------------------")
+
+print("Test  sentiment_analysis_en")
 sentiment_label = Analysis.sentiment_analysis_en(text)
 print("Sentiment label: ", sentiment_label)
 
 print("-------------------------------------------")
 
 print("Test preprocessing_en")
-print("Frase in ingresso: ", text)
 list_of_word = Preprocessing.preprocessing_en(text)
 print(list_of_word)
 
 print("-------------------------------------------")
 
+print("Test topic_extraction")
+Analysis.topic_extraction(text)
+
+print("-------------------------------------------")
