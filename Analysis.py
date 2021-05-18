@@ -13,9 +13,7 @@ from gensim.models import Phrases
 
 def sentiment_analysis_en(text):
 
-    # print("Text before sent_tokenize: ", text)
     text = tokenize.sent_tokenize(text)
-    # print("Text after sent_tokenize: ", text)
 
     sia = SentimentIntensityAnalyzer()
 
@@ -34,6 +32,25 @@ def sentiment_analysis_en(text):
 
     sentiment_label = label[score.index(max(score))]
     return sentiment_label, max(score)
+
+
+def sentiment_analysis_en_for_sentence(text):
+
+    text = tokenize.sent_tokenize(text)
+
+    sia = SentimentIntensityAnalyzer()
+
+    sentiment_label_for_sent = []
+
+    label = ["POSITIVE", "NEUTRAL", "NEGATIVE"]
+
+    for sent in text:
+        sentiment = sia.polarity_scores(sent)
+        score = [sentiment['pos'], sentiment['neu'], sentiment['neg']]
+        sentiment_label = label[score.index(max(score))]
+        sentiment_label_for_sent.append([sent, sentiment_label, max(score)])
+
+    return sentiment_label_for_sent
 
 
 def topic_modelling():

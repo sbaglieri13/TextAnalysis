@@ -8,7 +8,8 @@ text4 = "I’m good, thanks."
 text5 = "Everything they do -- everything -- ends with a big hug, because Teletubbies love each other very much. “Biiiiiig Huuuuuug!”"
 text6 = "So sweet a kiss the golden sun gives not To those fresh morning drops upon the rose, As thy eye-beams, when their fresh rays have smote The night of dew that on my cheeks down flows: Nor shines the silver moon one half so bright Through the transparent bosom of the deep, As doth thy face through tears of mine give light; Thou shinest in every tear that I do weep: No drop but as a coach doth carry thee; So ridest thou triumphing in my woe. Do but behold the tears that swell in me, And they thy glory through my grief will show: But do not love thyself; then thou wilt keep My tears for glasses, and still make me weep. O queen of queens! how far dost thou excel, No thought can think, nor tongue of mortal tell. How shall she know my griefs? I'll drop the paper: Sweet leaves, shade folly. Who is he comes here?"
 
-text = text5
+text = text1
+# text = input("Insert text: ")
 
 print("-------------------------------------------")
 
@@ -19,6 +20,12 @@ print("-------------------------------------------")
 print("Test  sentiment_analysis_en")
 sentiment_label = Analysis.sentiment_analysis_en(text)
 print("Sentiment label: ", sentiment_label)
+
+print("-------------------------------------------")
+
+print("Test  sentiment_analysis_en_for_sentence")
+sentiment_label_for_sentence = Analysis.sentiment_analysis_en_for_sentence(text)
+print("Sentiment label for sentence: ", sentiment_label_for_sentence)
 
 print("-------------------------------------------")
 
