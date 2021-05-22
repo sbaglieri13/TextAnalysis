@@ -35,7 +35,13 @@ print(list_of_word)
 
 print("-------------------------------------------")
 
-print("Test topic_extraction")
-Analysis.topic_extraction(text)
+print("Test topic_extraction without data")
+Analysis.topic_extraction(text, None, 10)
 
 print("-------------------------------------------")
+
+print("Test topic_extraction with data")
+Analysis.topic_extraction(text, 'Data.txt', 10)
+
+
+
