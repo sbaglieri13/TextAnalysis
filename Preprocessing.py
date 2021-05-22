@@ -10,8 +10,6 @@ def preprocessing_en(text):
     tokenizer = tokenize.TreebankWordTokenizer()
     tokens = tokenizer.tokenize(text.lower())
 
-    # print("Text tokenize: ", tokens)
-
     # Normalization
     lemmatizer = WordNetLemmatizer()
     tagged_tokens = pos_tag(tokens)
@@ -20,8 +18,6 @@ def preprocessing_en(text):
         wrdnt_tag = map_postag_into_wordnet(tag)
         lemma = lemmatizer.lemmatize(word, pos=wrdnt_tag)
         lemma_list.append(lemma)
-
-    # print("Text lemmatizer: ", lemma_list)
 
     # Removing stopwords and punctuation
     stopwords_verbs = ['say', 'get', 'go', 'know', 'may', 'need', 'like', 'make', 'see', 'want', 'come', 'take', 'use',
@@ -33,8 +29,6 @@ def preprocessing_en(text):
         if word not in stop_words:
             if word.isalpha() and len(word) > 3:
                 filtered_lemma_list.append(word)
-
-    # print("Text stopwords: ", filtered_lemma_list)
 
     return filtered_lemma_list
 
