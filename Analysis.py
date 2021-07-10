@@ -51,7 +51,7 @@ def sentiment_analysis_en_for_sentence(text):
     return sentiment_label_for_sent
 
 
-def topic_modelling(data, num_topics):
+def topic_modelling(data):
     if data is None:
         data = pd.read_csv('articles_bbc.csv')
         data = data.dropna().reset_index(drop=True)
@@ -69,67 +69,43 @@ def topic_modelling(data, num_topics):
         bigram_model = Phrases(tokens)
         trigram_model = Phrases(bigram_model[tokens], min_count=1)
         tokens = list(trigram_model[bigram_model[tokens]])
-
-        dictionary_LDA = corpora.Dictionary(tokens)
-        dictionary_LDA.filter_extremes(no_below=3)
-        corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
-
-        np.random.seed(123456)
-        lda_model = models.LdaModel(corpus, num_topics=num_topics,
-                                    id2word=dictionary_LDA,
-                                    passes=4, alpha=[0.01] * num_topics,
-                                    eta=[0.01] * len(dictionary_LDA.keys()))
-
-        for i, topic in lda_model.show_topics(formatted=True, num_topics=num_topics, num_words=20):
-            print(str(i) + ": " + topic)
-            print()
-
-        return lda_model, dictionary_LDA
-
     else:
         with open(data, 'r') as file:
             data = file.read().replace('\n', '')
 
         data = sent_tokenize(data)
-        data_after_pp = []
+        tokens = []
         for sentence in data:
-            data_after_pp.append(pp.preprocessing_en(sentence))
+            tokens.append(pp.preprocessing_en(sentence))
 
-        data_after_pp = list(data_after_pp)
-        dictionary_LDA = corpora.Dictionary(data_after_pp)
-        dictionary_LDA.filter_extremes(no_below=3)
-        corpus = [dictionary_LDA.doc2bow(tok) for tok in data_after_pp]
+        tokens = list(tokens)
 
-        np.random.seed(123456)
-        lda_model = models.LdaModel(corpus, num_topics=num_topics,
-                                    id2word=dictionary_LDA,
-                                    passes=4, alpha=[0.01] * num_topics,
-                                    eta=[0.01] * len(dictionary_LDA.keys()))
+    dictionary_LDA = corpora.Dictionary(tokens)
+    dictionary_LDA.filter_extremes(no_below=3)
+    corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
 
-        for i, topic in lda_model.show_topics(formatted=True, num_topics=num_topics, num_words=20):
-            print(str(i) + ": " + topic)
-            print()
+    np.random.seed(123456)
+    lda_model = models.LdaModel(corpus, num_topics=10,
+                                id2word=dictionary_LDA,
+                                passes=4, alpha=[0.01] * 10,
+                                eta=[0.01] * len(dictionary_LDA.keys()))
 
-        return lda_model, dictionary_LDA
+    for i, topic in lda_model.show_topics(formatted=True, num_topics=10, num_words=20):
+        print(str(i) + ": " + topic)
+    print()
+
+    return lda_model, dictionary_LDA
 
 
-def topic_extraction(text, data, num_topics):
+def topic_extraction(text, data):
     if data is None:
-        lda_model, dictionary_LDA = topic_modelling(None, num_topics)
-        tokens = pp.preprocessing_en(text)
-        topics = lda_model.show_topics(formatted=True, num_topics=num_topics, num_words=20)
-        print(
-            pd.DataFrame(
-                [(el[0], round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary_LDA.doc2bow(tokens)]],
-                columns=['topic #', 'weight', 'words in topic']))
-
+        lda_model, dictionary_LDA = topic_modelling(None)
     else:
-        lda_model, dictionary_LDA = topic_modelling(data, num_topics)
-        tokens = pp.preprocessing_en(text)
-        topics = lda_model.show_topics(formatted=True, num_topics=num_topics, num_words=20)
-        print(
-            pd.DataFrame(
-                [(el[0], round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary_LDA.doc2bow(tokens)]],
-                columns=['topic #', 'weight', 'words in topic']))
+        lda_model, dictionary_LDA = topic_modelling(data)
 
-
+    tokens = pp.preprocessing_en(text)
+    topics = lda_model.show_topics(formatted=True, num_topics=10, num_words=20)
+    print(
+        pd.DataFrame(
+            [(el[0], round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary_LDA.doc2bow(tokens)]],
+            columns=['topic #', 'weight', 'words in topic']))
