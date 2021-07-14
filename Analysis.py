@@ -10,6 +10,10 @@ from gensim import models
 from gensim import corpora
 from gensim.models import Phrases
 
+topic_labels = ["News & Politics", "Law & Government", "Art", "Hobbies & Interests", "Entertainment",
+                "People & Society", "Business", "Nature", "Fashion", "Work"]
+sentiment_labels = ["POSITIVE", "NEUTRAL", "NEGATIVE"]
+
 
 def sentiment_analysis_en(text):
     text = tokenize.sent_tokenize(text)
@@ -26,11 +30,11 @@ def sentiment_analysis_en(text):
         neg_score.append(sentiment['neg'])
         neu_score.append(sentiment['neu'])
 
-    label = ["POSITIVE", "NEUTRAL", "NEGATIVE"]
     score = [np.mean(pos_score) * 100, np.mean(neu_score) * 100, np.mean(neg_score) * 100]
 
-    sentiment_label = label[score.index(max(score))]
-    return sentiment_label, max(score)
+    sentiment_label = sentiment_labels[score.index(max(score))]
+
+    return sentiment_label, round(max(score), 2)
 
 
 def sentiment_analysis_en_for_sentence(text):
@@ -40,13 +44,11 @@ def sentiment_analysis_en_for_sentence(text):
 
     sentiment_label_for_sent = []
 
-    label = ["POSITIVE", "NEUTRAL", "NEGATIVE"]
-
     for sent in text:
         sentiment = sia.polarity_scores(sent)
         score = [sentiment['pos'], sentiment['neu'], sentiment['neg']]
-        sentiment_label = label[score.index(max(score))]
-        sentiment_label_for_sent.append([sent, sentiment_label, max(score)])
+        sentiment_label = sentiment_labels[score.index(max(score))]
+        sentiment_label_for_sent.append([sent, sentiment_label, (round(max(score), 2)*100)])
 
     return sentiment_label_for_sent
 
@@ -90,22 +92,37 @@ def topic_modelling(data):
                                 passes=4, alpha=[0.01] * 10,
                                 eta=[0.01] * len(dictionary_LDA.keys()))
 
-    for i, topic in lda_model.show_topics(formatted=True, num_topics=10, num_words=20):
-        print(str(i) + ": " + topic)
-    print()
-
     return lda_model, dictionary_LDA
 
 
 def topic_extraction(text, data):
     if data is None:
         lda_model, dictionary_LDA = topic_modelling(None)
+
+        tokens = pp.preprocessing_en(text)
+        topics = []
+        for el in lda_model[dictionary_LDA.doc2bow(tokens)]:
+            topics.append([topic_labels[el[0]], round((el[1] * 100), 2)])
+        topics = sorted(topics, key=lambda x: x[1], reverse=True)
+
+        return topics
+
     else:
         lda_model, dictionary_LDA = topic_modelling(data)
+        tokens = pp.preprocessing_en(text)
+        show_topics_list(lda_model)
+        show_topics(lda_model, dictionary_LDA, tokens)
 
-    tokens = pp.preprocessing_en(text)
+
+def show_topics_list(lda_model):
+    for i, topic in lda_model.show_topics(formatted=True, num_topics=10, num_words=20):
+        print(str(i) + ": " + topic)
+    print()
+
+
+def show_topics(lda_model, dictionary, tokens):
     topics = lda_model.show_topics(formatted=True, num_topics=10, num_words=20)
     print(
         pd.DataFrame(
-            [(el[0], round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary_LDA.doc2bow(tokens)]],
+            [(el[0], round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary.doc2bow(tokens)]],
             columns=['topic #', 'weight', 'words in topic']))
