@@ -1,5 +1,6 @@
 import Analysis
 import Preprocessing
+import SpeechRecognition as sr
 
 text1 = "To bait fish withal: if it will feed nothing else, it will feed my revenge. He hath disgraced me, and hindered me half a million; laughed at my losses, mocked at my gains, scorned my nation, thwarted my bargains, cooled my friends, heated mine enemies; and what's his reason? I am a Jew. Hath not a Jew eyes? hath not a Jew hands, organs, dimensions, senses, affections, passions? fed with the same food, hurt with the same weapons, subject to the same diseases, healed by the same means, warmed and cooled by the same winter and summer, as a Christian is? If you prick us, do we not bleed? if you tickle us, do we not laugh? if you poison us, do we not die? and if you wrong us, shall we not revenge? If we are like you in the rest, we will resemble you in that. If a Jew wrong a Christian, what is his humility? Revenge. If a Christian wrong a Jew, what should his sufferance be by Christian example? Why, revenge. The villany you teach me, I will execute, and it shall go hard but I will better the instruction."
 text2 = "You’re an event. In their lives. People go through life doing the same thing over and over, living the same day again and again. It’s what we do. And every now and then, there’s an event. Something that shocks you, or surprises you – doesn’t matter, it’s an event that reminds you that life can still be interesting. It can always throw something at you that – well, in a zillion years you would never expect it. And it becomes a currency, something that sets you apart. And for a few days, you’re the guy that got stuck in the elevator with a Drag Queen. And everyone asks you about it. And you can laugh. And be the centre of attention. Those people that saw you – they’re going to talk about that for a long time."
@@ -36,12 +37,26 @@ print(list_of_word)
 print("-------------------------------------------")
 
 print("Test topic_extraction without data")
-Analysis.topic_extraction(text, None, 10)
+topics = Analysis.topic_extraction(text, None)
+if topics is not None:
+    print(topics)
 
 print("-------------------------------------------")
 
 print("Test topic_extraction with data")
-Analysis.topic_extraction(text, 'Data.txt', 10)
+topics = Analysis.topic_extraction(text, 'All s Well That Ends Well, Act1, Scene 1.txt')
+if topics is not None:
+    print(topics)
 
+print("-------------------------------------------")
+
+print("Test sentiment analysis and topic extraction with Google API (no data)")
+text_input_google_api = sr.run()
+print("Text: " + text_input_google_api)
+sentiment = Analysis.sentiment_analysis_en(text_input_google_api)
+print("Sentiment: " + sentiment)
+topics = Analysis.topic_extraction(text_input_google_api, None)
+if topics is not None:
+    print(topics)
 
 
