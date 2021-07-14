@@ -1,4 +1,4 @@
-import Preprocessing as pp
+import preprocessing as pp
 from nltk import tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nltk.tokenize import sent_tokenize
@@ -64,7 +64,7 @@ def topic_modelling(data):
         data['sentences'] = data.articles.map(sent_tokenize)
 
         data['tokens'] = data['sentences'].map(
-            lambda sentences: [pp.preprocessing_en(sentence) for sentence in sentences])
+            lambda sentences: [pp.preprocessing_en(sent) for sent in sentences])
 
         data['tokens'] = data['tokens'].map(lambda sentences: list(chain.from_iterable(sentences)))
         tokens = data['tokens']
