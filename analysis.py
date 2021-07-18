@@ -105,7 +105,7 @@ def topic_extraction(text, data):
             topics.append([topic_labels[el[0]], round((el[1] * 100), 2)])
         topics = sorted(topics, key=lambda x: x[1], reverse=True)
 
-        return topics
+        return topics[0]
 
     else:
         lda_model, dictionary_LDA = topic_modelling(data)
