@@ -1,129 +1,75 @@
+import os
+from sys import argv
+import django
 import analysis as an
-import preprocessing
 import speechRecognition as sr
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TextAnalysis.settings')
+django.setup()
 
-# text1 = "To bait fish withal: if it will feed nothing else, it will feed my revenge. He hath disgraced me, " \
-#         "and hindered me half a million; laughed at my losses, mocked at my gains, scorned my nation, thwarted my " \
-#         "bargains, cooled my friends, heated mine enemies; and what's his reason? I am a Jew. Hath not a Jew eyes? " \
-#         "hath not a Jew hands, organs, dimensions, senses, affections, passions? fed with the same food, " \
-#         "hurt with the same weapons, subject to the same diseases, healed by the same means, warmed and cooled by the " \
-#         "same winter and summer, as a Christian is? If you prick us, do we not bleed? if you tickle us, " \
-#         "do we not laugh? if you poison us, do we not die? and if you wrong us, shall we not revenge? If we are like " \
-#         "you in the rest, we will resemble you in that. If a Jew wrong a Christian, what is his humility? Revenge. If " \
-#         "a Christian wrong a Jew, what should his sufferance be by Christian example? Why, revenge. The villany you " \
-#         "teach me, I will execute, and it shall go hard but I will better the instruction. "
-# text2 = "You’re an event. In their lives. People go through life doing the same thing over and over, living the same " \
-#         "day again and again. It’s what we do. And every now and then, there’s an event. Something that shocks you, " \
-#         "or surprises you – doesn’t matter, it’s an event that reminds you that life can still be interesting. It can " \
-#         "always throw something at you that – well, in a zillion years you would never expect it. And it becomes a " \
-#         "currency, something that sets you apart. And for a few days, you’re the guy that got stuck in the elevator " \
-#         "with a Drag Queen. And everyone asks you about it. And you can laugh. And be the centre of attention. Those " \
-#         "people that saw you – they’re going to talk about that for a long time. "
-# text3 = "You may see, Lepidus, and henceforth know, It is not Caesar's natural vice to hate Our great competitor: " \
-#         "from Alexandria This is the news: he fishes, drinks, and wastes The lamps of night in revel; is not more " \
-#         "man-like Than Cleopatra; nor the queen of Ptolemy More womanly than he; hardly gave audience, or Vouchsafed " \
-#         "to think he had partners: you shall find there A man who is the abstract of all faults That all men follow. "
-# text4 = "I’m good, thanks."
-# text5 = "Everything they do -- everything -- ends with a big hug, because Teletubbies love each other very much. " \
-#         "“Biiiiiig Huuuuuug!” "
-# text6 = "So sweet a kiss the golden sun gives not To those fresh morning drops upon the rose, As thy eye-beams, " \
-#         "when their fresh rays have smote The night of dew that on my cheeks down flows: Nor shines the silver moon " \
-#         "one half so bright Through the transparent bosom of the deep, As doth thy face through tears of mine give " \
-#         "light; Thou shinest in every tear that I do weep: No drop but as a coach doth carry thee; So ridest thou " \
-#         "triumphing in my woe. Do but behold the tears that swell in me, And they thy glory through my grief will " \
-#         "show: But do not love thyself; then thou wilt keep My tears for glasses, and still make me weep. O queen of " \
-#         "queens! how far dost thou excel, No thought can think, nor tongue of mortal tell. How shall she know my " \
-#         "griefs? I'll drop the paper: Sweet leaves, shade folly. Who is he comes here? "
-#
-# text = text1
-# # text = input("Insert text: ")
-#
-# print("-------------------------------------------")
-#
-# print("Input text", text)
-#
-# print("-------------------------------------------")
-#
-# print("Test  sentiment_analysis_en")
-# sentiment_label = an.sentiment_analysis_en(text)
-# print("Sentiment label: ", sentiment_label)
-#
-# print("-------------------------------------------")
-#
-# print("Test  sentiment_analysis_en_for_sentence")
-# sentiment_label_for_sentence = an.sentiment_analysis_en_for_sentence(text)
-# print("Sentiment label for sentence: ", sentiment_label_for_sentence)
-#
-# print("-------------------------------------------")
-#
-# print("Test preprocessing_en")
-# list_of_word = preprocessing.preprocessing_en(text)
-# print(list_of_word)
-#
-# print("-------------------------------------------")
-#
-# print("Test topic_extraction without data")
-# topics = an.topic_extraction(text, None)
-# if topics is not None:
-#     print(topics)
-#
-# print("-------------------------------------------")
-#
-# print("Test topic_extraction with data")
-# topics = an.topic_extraction(text, 'data_examples/All s Well That Ends Well, Act1, Scene 1.txt')
-# if topics is not None:
-#     print(topics)
-#
-# print("-------------------------------------------")
-#
-# print("Test sentiment analysis and topic extraction with Google API (no data)")
-# text_input_google_api = sr.run()
-# print("Text: " + text_input_google_api)
-# sentiment = an.sentiment_analysis_en(text_input_google_api)
-# print("Sentiment: " + sentiment)
-# topics = an.topic_extraction(text_input_google_api, None)
-# if topics is not None:
-#     print(topics)
-#
-# print("-------------------------------------------")
-# print("-------------------------------------------")
-# print("-------------------------------------------")
+from webapp.models import PredictionText, PredictionSpeech
 
 
-def run_speech_analysis():
-    text = sr.run()
-    print("YOU SAID: " + text + "\n")
+def text_analysis(text):
     sentiment = an.sentiment_analysis_en(text)
-    topics = an.topic_extraction(text, None)
-    print("SENTIMENT DETECTED: ")
-    print(sentiment)
-    print()
-    print("TOPICS DETECTED: ")
-    print(topics)
+    topic = an.topic_extraction(text, None)
+    return sentiment, topic
 
 
-def run_speech_analysis_with_data(data):
+def speech_analysis():
     text = sr.run()
     sentiment = an.sentiment_analysis_en(text)
-    print("SENTIMENT DETECTED: ")
-    print(sentiment)
-    an.topic_extraction(text, data)
+    topic = an.topic_extraction(text, None)
+    return text, sentiment, topic
 
 
-def run_text_analysis(text):
-    sentiment = an.sentiment_analysis_en(text)
-    topics = an.topic_extraction(text, None)
-    print("SENTIMENT DETECTED: ")
-    print(sentiment)
-    print()
-    print("TOPICS DETECTED: ")
-    print(topics)
+def main(text):
+    text = " ".join(text)
+
+    if text != "":
+        sentiment, topic = text_analysis(text)
+        if topic[1] < 50:
+            prediction = PredictionText(
+                text=text,
+                sentiment=sentiment[0],
+                sentiment_acc=sentiment[1],
+                topic=None,
+                topic_acc=None
+            )
+
+        else:
+            prediction = PredictionText(
+                text=text,
+                sentiment=sentiment[0],
+                sentiment_acc=sentiment[1],
+                topic=topic[0],
+                topic_acc=topic[1]
+            )
+
+        prediction.save()
+
+    else:
+        text, sentiment, topic = speech_analysis()
+        if topic[1] < 50:
+            prediction = PredictionSpeech(
+                speech_text=text,
+                sentiment=sentiment[0],
+                sentiment_acc=sentiment[1],
+                topic=None,
+                topic_acc=None
+            )
+
+        else:
+            prediction = PredictionSpeech(
+                speech_text=text,
+                sentiment=sentiment[0],
+                sentiment_acc=sentiment[1],
+                topic=topic[0],
+                topic_acc=topic[1]
+            )
+
+        prediction.save()
 
 
-def run_text_analysis_with_data(text, data):
-    sentiment = an.sentiment_analysis_en(text)
-    print("SENTIMENT DETECTED: ")
-    print(sentiment)
-    an.topic_extraction(text, data)
-
+if __name__ == '__main__':
+    main(argv[1:])
