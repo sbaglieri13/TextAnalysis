@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import PredictionText, PredictionSpeech
+from .models import Prediction, DataPrediction
 
 # Register your models here.
 
-admin.site.register(PredictionText)
-admin.site.register(PredictionSpeech)
+admin.site.register(Prediction)
+admin.site.register(DataPrediction)

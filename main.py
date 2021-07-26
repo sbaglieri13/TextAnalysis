@@ -1,5 +1,4 @@
 import os
-from sys import argv
 import django
 import analysis as an
 import speechRecognition as sr
@@ -7,7 +6,7 @@ import speechRecognition as sr
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TextAnalysis.settings')
 django.setup()
 
-from webapp.models import PredictionText, PredictionSpeech
+from webapp.models import Prediction
 
 
 def text_analysis(text):
@@ -23,53 +22,47 @@ def speech_analysis():
     return text, sentiment, topic
 
 
-def main(text):
-    text = " ".join(text)
+def analysis_with_data(text, data):
+    sentiment = an.sentiment_analysis_en(text)
+    sentiment_for_sent = an.sentiment_analysis_en_for_sentence(text)
+    topics = an.topic_extraction(text, 'data/' + str(data).replace(" ", "_"))
+    return sentiment, sentiment_for_sent, topics
 
+
+def analysis(text):
+    text = "".join(text)
     if text != "":
         sentiment, topic = text_analysis(text)
-        if topic[1] < 50:
-            prediction = PredictionText(
-                text=text,
-                sentiment=sentiment[0],
-                sentiment_acc=sentiment[1],
-                topic=None,
-                topic_acc=None
-            )
-
-        else:
-            prediction = PredictionText(
-                text=text,
-                sentiment=sentiment[0],
-                sentiment_acc=sentiment[1],
-                topic=topic[0],
-                topic_acc=topic[1]
-            )
-
-        prediction.save()
-
     else:
         text, sentiment, topic = speech_analysis()
-        if topic[1] < 50:
-            prediction = PredictionSpeech(
-                speech_text=text,
-                sentiment=sentiment[0],
-                sentiment_acc=sentiment[1],
-                topic=None,
-                topic_acc=None
-            )
 
-        else:
-            prediction = PredictionSpeech(
-                speech_text=text,
-                sentiment=sentiment[0],
-                sentiment_acc=sentiment[1],
-                topic=topic[0],
-                topic_acc=topic[1]
-            )
+    if topic[1] < 50:
+        prediction = Prediction(
+            text=text,
+            sentiment=sentiment[0],
+            sentiment_acc=sentiment[1],
+            topic=None,
+            topic_acc=None
+        )
 
-        prediction.save()
+    else:
+        prediction = Prediction(
+            text=text,
+            sentiment=sentiment[0],
+            sentiment_acc=sentiment[1],
+            topic=topic[0],
+            topic_acc=topic[1]
+        )
+
+    prediction.save()
 
 
-if __name__ == '__main__':
-    main(argv[1:])
+def data_analysis(text, data):
+    text = "".join(text)
+    if text != "":
+        sentiment, sentiment_for_sent, topics = analysis_with_data(text, data)
+    else:
+        text = sr.run()
+        sentiment, sentiment_for_sent, topics = analysis_with_data(text, data)
+
+    return text, sentiment, sentiment_for_sent, topics

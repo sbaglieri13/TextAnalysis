@@ -1,31 +1,52 @@
 from django.http import HttpResponseRedirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import PredictionTextSerializer, PredictionSpeechSerializer
-from .models import PredictionText, PredictionSpeech
-import os
+
+import main
+from .serializers import PredictionSerializer, DataPredictionSerializer
+from .models import Prediction, DataPrediction
 
 
 # Create your views here.
 
-@api_view(['POST'])
+
+@api_view(['GET', 'POST'])
 def analysis(request):
-    os.system("python main.py " + request.data)
-    if " ".join(request.data) == "":
-        return HttpResponseRedirect('speech-results/')
-    else:
-        return HttpResponseRedirect('text-results/')
+    if request.method == 'POST':
+        input_text = request.POST['text']
+        main.analysis(input_text)
+        return HttpResponseRedirect('prediction/')
+    elif request.method == 'GET':
+        table = Prediction.objects.all()
+        serializer = PredictionSerializer(table, many=True)
+        return Response(serializer.data)
 
 
-@api_view(['GET'])
-def text_analysis_view(request):
-    table = PredictionText.objects.all()
-    serializer = PredictionTextSerializer(table, many=True)
-    return Response(serializer.data)
+@api_view(['GET', 'POST'])
+def data_analysis(request):
+    if request.method == 'POST':
+        input_text = request.POST['text']
+        data = request.FILES['data']
 
+        # text, sentiment, sentiment_for_sent, topic = main.data_analysis(input_text, data)
 
-@api_view(['GET'])
-def speech_analysis_view(request):
-    table = PredictionSpeech.objects.all()
-    serializer = PredictionSpeechSerializer(table, many=True)
-    return Response(serializer.data)
+        table = DataPrediction(
+            data=data,
+        )
+
+        table.save()
+
+        text, sentiment, sentiment_for_sent, topic = main.data_analysis(input_text, data)
+
+        table.text = text
+        table.sentiment = sentiment
+        table.sentiment_for_sentence = sentiment_for_sent
+        table.topic = topic
+        table.save()
+
+        return HttpResponseRedirect('prediction/')
+
+    elif request.method == 'GET':
+        table = DataPrediction.objects.all()
+        serializer = DataPredictionSerializer(table, many=True)
+        return Response(serializer.data)

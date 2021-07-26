@@ -1,14 +1,14 @@
 from rest_framework import serializers
-from .models import PredictionText, PredictionSpeech
+from .models import Prediction, DataPrediction
 
 
-class PredictionTextSerializer(serializers.ModelSerializer):
+class PredictionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PredictionText
+        model = Prediction
         fields = '__all__'
 
 
-class PredictionSpeechSerializer(serializers.ModelSerializer):
+class DataPredictionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PredictionSpeech
+        model = DataPrediction
         fields = '__all__'

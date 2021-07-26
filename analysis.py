@@ -48,7 +48,7 @@ def sentiment_analysis_en_for_sentence(text):
         sentiment = sia.polarity_scores(sent)
         score = [sentiment['pos'], sentiment['neu'], sentiment['neg']]
         sentiment_label = sentiment_labels[score.index(max(score))]
-        sentiment_label_for_sent.append([sent, sentiment_label, (round(max(score), 2)*100)])
+        sentiment_label_for_sent.append([sent, sentiment_label, (round(max(score), 2) * 100)])
 
     return sentiment_label_for_sent
 
@@ -110,8 +110,9 @@ def topic_extraction(text, data):
     else:
         lda_model, dictionary_LDA = topic_modelling(data)
         tokens = pp.preprocessing_en(text)
-        show_topics_list(lda_model)
-        show_topics(lda_model, dictionary_LDA, tokens)
+        # show_topics_list(lda_model)
+        # show_topics(lda_model, dictionary_LDA, tokens)
+        return topics_list(lda_model, dictionary_LDA, tokens)
 
 
 def show_topics_list(lda_model):
@@ -126,3 +127,9 @@ def show_topics(lda_model, dictionary, tokens):
         pd.DataFrame(
             [(el[0], round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary.doc2bow(tokens)]],
             columns=['topic #', 'weight', 'words in topic']))
+
+
+def topics_list(lda_model, dictionary, tokens):
+    topics = lda_model.show_topics(formatted=True, num_topics=10, num_words=20)
+    topics = [(round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary.doc2bow(tokens)]]
+    return topics
