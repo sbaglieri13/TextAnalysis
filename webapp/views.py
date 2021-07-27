@@ -28,8 +28,6 @@ def data_analysis(request):
         input_text = request.POST['text']
         data = request.FILES['data']
 
-        # text, sentiment, sentiment_for_sent, topic = main.data_analysis(input_text, data)
-
         table = DataPrediction(
             data=data,
         )

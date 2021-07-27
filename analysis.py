@@ -1,3 +1,5 @@
+import nltk
+
 import preprocessing as pp
 from nltk import tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
@@ -9,6 +11,13 @@ from langdetect import detect
 from gensim import models
 from gensim import corpora
 from gensim.models import Phrases
+
+nltk.download('punkt')
+nltk.download('vader_lexicon')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+nltk.download('stopwords')
+
 
 topic_labels = ["News & Politics", "Law & Government", "Art", "Hobbies & Interests", "Entertainment",
                 "People & Society", "Business", "Nature", "Fashion", "Work"]
