@@ -1,9 +1,12 @@
+import uuid
+
 from django.db import models
 
 
 # Create your models here.
 
 class Prediction(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     text = models.TextField()
     sentiment = models.CharField(max_length=10, null=True)
     sentiment_acc = models.FloatField(null=True)
@@ -15,6 +18,7 @@ class Prediction(models.Model):
 
 
 class DataPrediction(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     text = models.TextField()
     data = models.FileField(upload_to='data')
     sentiment = models.TextField(null=True)

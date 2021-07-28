@@ -9,17 +9,10 @@ django.setup()
 from webapp.models import Prediction
 
 
-def text_analysis(text):
+def analysis_without_data(text):
     sentiment = an.sentiment_analysis_en(text)
     topic = an.topic_extraction(text, None)
     return sentiment, topic
-
-
-def speech_analysis():
-    text = sr.run()
-    sentiment = an.sentiment_analysis_en(text)
-    topic = an.topic_extraction(text, None)
-    return text, sentiment, topic
 
 
 def analysis_with_data(text, data):
@@ -29,15 +22,16 @@ def analysis_with_data(text, data):
     return sentiment, sentiment_for_sent, topics
 
 
-def analysis(text):
+def analysis(text, unique_id):
     text = "".join(text)
-    if text != "":
-        sentiment, topic = text_analysis(text)
-    else:
-        text, sentiment, topic = speech_analysis()
+    if text == "":
+        text = sr.run()
+
+    sentiment, topic = analysis_without_data(text)
 
     if topic[1] < 50:
         prediction = Prediction(
+            id=unique_id,
             text=text,
             sentiment=sentiment[0],
             sentiment_acc=sentiment[1],
@@ -47,6 +41,7 @@ def analysis(text):
 
     else:
         prediction = Prediction(
+            id=unique_id,
             text=text,
             sentiment=sentiment[0],
             sentiment_acc=sentiment[1],
@@ -59,10 +54,9 @@ def analysis(text):
 
 def data_analysis(text, data):
     text = "".join(text)
-    if text != "":
-        sentiment, sentiment_for_sent, topics = analysis_with_data(text, data)
-    else:
+    if text == "":
         text = sr.run()
-        sentiment, sentiment_for_sent, topics = analysis_with_data(text, data)
+
+    sentiment, sentiment_for_sent, topics = analysis_with_data(text, data)
 
     return text, sentiment, sentiment_for_sent, topics
