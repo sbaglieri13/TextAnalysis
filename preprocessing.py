@@ -20,10 +20,10 @@ def preprocessing_en(text):
         lemma_list.append(lemma)
 
     # Removing stopwords and punctuation
-    stopwords_verbs = ['say', 'get', 'go', 'know', 'may', 'need', 'like', 'make', 'see', 'want', 'come', 'take', 'use',
-                       'would', 'can']
-    stopwords_other = ['one', 'mr', 'bbc', 'image', 'getty', 'de', 'en', 'caption', 'also', 'copyright', 'something']
-    stop_words = stopwords.words("english") + stopwords_verbs + stopwords_other
+    stop_words = stopwords.words("english")
+    with open('stop_words_english.txt') as f:
+        stop_words += (f.read().splitlines())
+
     filtered_lemma_list = []
     for word in lemma_list:
         if word not in stop_words:
