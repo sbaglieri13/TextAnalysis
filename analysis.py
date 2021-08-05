@@ -18,10 +18,12 @@ nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 nltk.download('stopwords')
 
-
 topic_labels = ["News & Politics", "Law & Government", "Art", "Hobbies & Interests", "Entertainment",
                 "People & Society", "Business", "Nature", "Fashion", "Work"]
 sentiment_labels = ["POSITIVE", "NEUTRAL", "NEGATIVE"]
+
+lda_model_articles_bbc = None
+dictionary_LDA_articles_bbc = None
 
 
 def sentiment_analysis_en(text):
@@ -62,34 +64,23 @@ def sentiment_analysis_en_for_sentence(text):
     return sentiment_label_for_sent
 
 
-def topic_modelling(data):
-    if data is None:
-        data = pd.read_csv('articles_bbc.csv')
-        data = data.dropna().reset_index(drop=True)
+def topic_modelling_load():
+    data = pd.read_csv('articles_bbc.csv')
+    data = data.dropna().reset_index(drop=True)
 
-        data['lang'] = data.articles.map(detect)
-        data = data.loc[data.lang == 'en']
+    data['lang'] = data.articles.map(detect)
+    data = data.loc[data.lang == 'en']
 
-        data['sentences'] = data.articles.map(sent_tokenize)
+    data['sentences'] = data.articles.map(sent_tokenize)
 
-        data['tokens'] = data['sentences'].map(
-            lambda sentences: [pp.preprocessing_en(sent) for sent in sentences])
+    data['tokens'] = data['sentences'].map(
+        lambda sentences: [pp.preprocessing_en(sent) for sent in sentences])
 
-        data['tokens'] = data['tokens'].map(lambda sentences: list(chain.from_iterable(sentences)))
-        tokens = data['tokens']
-        bigram_model = Phrases(tokens)
-        trigram_model = Phrases(bigram_model[tokens], min_count=1)
-        tokens = list(trigram_model[bigram_model[tokens]])
-    else:
-        with open(data, 'r') as file:
-            data = file.read().replace('\n', '')
-
-        data = sent_tokenize(data)
-        tokens = []
-        for sentence in data:
-            tokens.append(pp.preprocessing_en(sentence))
-
-        tokens = list(tokens)
+    data['tokens'] = data['tokens'].map(lambda sentences: list(chain.from_iterable(sentences)))
+    tokens = data['tokens']
+    bigram_model = Phrases(tokens)
+    trigram_model = Phrases(bigram_model[tokens], min_count=1)
+    tokens = list(trigram_model[bigram_model[tokens]])
 
     dictionary_LDA = corpora.Dictionary(tokens)
     dictionary_LDA.filter_extremes(no_below=3)
@@ -101,7 +92,40 @@ def topic_modelling(data):
                                 passes=4, alpha=[0.01] * 10,
                                 eta=[0.01] * len(dictionary_LDA.keys()))
 
-    return lda_model, dictionary_LDA
+    global lda_model_articles_bbc
+    global dictionary_LDA_articles_bbc
+    lda_model_articles_bbc = lda_model
+    dictionary_LDA_articles_bbc = dictionary_LDA
+
+
+def topic_modelling(data):
+    if data is None and not lda_model_articles_bbc:
+        topic_modelling_load()
+        return lda_model_articles_bbc, dictionary_LDA_articles_bbc
+    elif data is None and lda_model_articles_bbc and lda_model_articles_bbc:
+        return lda_model_articles_bbc, dictionary_LDA_articles_bbc
+    else:
+        with open(data, 'r') as file:
+            data = file.read().replace('\n', '')
+
+        data = sent_tokenize(data)
+        tokens = []
+        for sentence in data:
+            tokens.append(pp.preprocessing_en(sentence))
+
+        tokens = list(tokens)
+
+        dictionary_LDA = corpora.Dictionary(tokens)
+        dictionary_LDA.filter_extremes(no_below=3)
+        corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
+
+        np.random.seed(123456)
+        lda_model = models.LdaModel(corpus, num_topics=10,
+                                    id2word=dictionary_LDA,
+                                    passes=4, alpha=[0.01] * 10,
+                                    eta=[0.01] * len(dictionary_LDA.keys()))
+
+        return lda_model, dictionary_LDA
 
 
 def topic_extraction(text, data):
