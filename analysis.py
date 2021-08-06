@@ -105,8 +105,7 @@ def topic_modelling(data):
     elif data is None and lda_model_articles_bbc and lda_model_articles_bbc:
         return lda_model_articles_bbc, dictionary_LDA_articles_bbc
     else:
-        with open(data, 'r') as file:
-            data = file.read().replace('\n', '')
+        data = data.read().decode()
 
         data = sent_tokenize(data)
         tokens = []

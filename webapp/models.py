@@ -20,7 +20,6 @@ class Prediction(models.Model):
 class DataPrediction(models.Model):
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     text = models.TextField()
-    data = models.FileField(upload_to='data')
     sentiment = models.TextField(null=True)
     sentiment_for_sentence = models.TextField(null=True)
     topic = models.TextField(null=True)

@@ -13,10 +13,80 @@ from .models import Prediction, DataPrediction
 
 
 @api_view(['POST'])
-def analysis(request):
+def text_analysis(request):
     input_text = request.POST['text']
     unique_id = uuid.uuid4()
-    main.analysis(input_text, unique_id)
+
+    text, sentiment, sentiment_acc, topic, topic_acc = main.analysis(input_text, None)
+
+    table = Prediction(
+        id=unique_id,
+        text=text,
+        sentiment=sentiment,
+        sentiment_acc=sentiment_acc,
+        topic=topic,
+        topic_acc=topic_acc
+    )
+    table.save()
+
+    return HttpResponseRedirect('prediction/' + str(unique_id))
+
+
+@api_view(['POST'])
+def audio_analysis(request):
+    audio_data = request.FILES['audio']
+    unique_id = uuid.uuid4()
+
+    text, sentiment, sentiment_acc, topic, topic_acc = main.analysis(None, audio_data)
+
+    table = Prediction(
+        id=unique_id,
+        text=text,
+        sentiment=sentiment,
+        sentiment_acc=sentiment_acc,
+        topic=topic,
+        topic_acc=topic_acc
+    )
+    table.save()
+
+    return HttpResponseRedirect('prediction/' + str(unique_id))
+
+
+@api_view(['POST'])
+def data_text_analysis(request):
+    input_text = request.POST['text']
+    data = request.FILES['data']
+    unique_id = uuid.uuid4()
+
+    text, sentiment, sentiment_for_sent, topic = main.data_analysis(input_text, None, data)
+    table = DataPrediction(
+        id=unique_id,
+        text=text,
+        sentiment=sentiment,
+        sentiment_for_sentence=sentiment_for_sent,
+        topic=topic
+    )
+    table.save()
+
+    return HttpResponseRedirect('prediction/' + str(unique_id))
+
+
+@api_view(['POST'])
+def data_audio_analysis(request):
+    audio_data = request.FILES['audio']
+    data = request.FILES['data']
+    unique_id = uuid.uuid4()
+
+    text, sentiment, sentiment_for_sent, topic = main.data_analysis(None, audio_data, data)
+    table = DataPrediction(
+        id=unique_id,
+        text=text,
+        sentiment=sentiment,
+        sentiment_for_sentence=sentiment_for_sent,
+        topic=topic
+    )
+    table.save()
+
     return HttpResponseRedirect('prediction/' + str(unique_id))
 
 
@@ -32,29 +102,6 @@ def analysis_view_all(request):
     table = Prediction.objects.all()
     serializer = PredictionSerializer(table, many=True)
     return Response(serializer.data)
-
-
-@api_view(['POST'])
-def data_analysis(request):
-    input_text = request.POST['text']
-    data = request.FILES['data']
-    unique_id = uuid.uuid4()
-    table = DataPrediction(
-        id=unique_id,
-        data=data,
-    )
-
-    table.save()
-
-    text, sentiment, sentiment_for_sent, topic = main.data_analysis(input_text, data)
-
-    table.text = text
-    table.sentiment = sentiment
-    table.sentiment_for_sentence = sentiment_for_sent
-    table.topic = topic
-    table.save()
-
-    return HttpResponseRedirect('prediction/' + str(unique_id))
 
 
 @api_view(['GET'])

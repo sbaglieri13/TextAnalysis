@@ -1,61 +1,40 @@
-import os
-import django
 import analysis as an
 import speechRecognition as sr
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TextAnalysis.settings')
-django.setup()
-
-from webapp.models import Prediction
-
 
 def analysis_without_data(text):
-    sentiment = an.sentiment_analysis_en(text)
-    topic = an.topic_extraction(text, None)
-    return sentiment, topic
+    sent = an.sentiment_analysis_en(text)
+    top = an.topic_extraction(text, None)
+    sentiment = sent[0]
+    sentiment_acc = sent[1]
+    topic = top[0]
+    topic_acc = top[1]
+    return sentiment, sentiment_acc, topic, topic_acc
 
 
 def analysis_with_data(text, data):
     sentiment = an.sentiment_analysis_en(text)
     sentiment_for_sent = an.sentiment_analysis_en_for_sentence(text)
-    topics = an.topic_extraction(text, 'data/' + str(data).replace(" ", "_"))
+    topics = an.topic_extraction(text, data)
     return sentiment, sentiment_for_sent, topics
 
 
-def analysis(text, unique_id):
-    text = "".join(text)
-    if text == "":
-        text = sr.run()
+def analysis(text, audio_file):
+    if audio_file is None:
+        text = "".join(text)
+    elif text is None:
+        text = sr.run(audio_file)
 
-    sentiment, topic = analysis_without_data(text)
+    sentiment, sentiment_acc, topic, topic_acc = analysis_without_data(text)
 
-    if topic[1] < 50:
-        prediction = Prediction(
-            id=unique_id,
-            text=text,
-            sentiment=sentiment[0],
-            sentiment_acc=sentiment[1],
-            topic=None,
-            topic_acc=None
-        )
-
-    else:
-        prediction = Prediction(
-            id=unique_id,
-            text=text,
-            sentiment=sentiment[0],
-            sentiment_acc=sentiment[1],
-            topic=topic[0],
-            topic_acc=topic[1]
-        )
-
-    prediction.save()
+    return text, sentiment, sentiment_acc, topic, topic_acc
 
 
-def data_analysis(text, data):
-    text = "".join(text)
-    if text == "":
-        text = sr.run()
+def data_analysis(text, audio_file, data):
+    if audio_file is None:
+        text = "".join(text)
+    elif text is None:
+        text = sr.run(audio_file)
 
     sentiment, sentiment_for_sent, topics = analysis_with_data(text, data)
 
