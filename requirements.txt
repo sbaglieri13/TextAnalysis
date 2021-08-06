@@ -6,4 +6,4 @@ pandas==1.2.5
 nltk==3.6.2
 numpy==1.20.2
 djangorestframework==3.12.4
-PyAudio==0.2.11
+pocketsphinx==0.1.15
