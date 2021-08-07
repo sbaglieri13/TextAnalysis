@@ -18,8 +18,11 @@ nltk.download('averaged_perceptron_tagger')
 nltk.download('wordnet')
 nltk.download('stopwords')
 
-topic_labels = ["News & Politics", "Law & Government", "Art", "Hobbies & Interests", "Entertainment",
-                "People & Society", "Business", "Nature", "Fashion", "Work"]
+topic_labels = ["Travel", "Health - Disease", "Nature - Environment", "Science", "Lifestyle & Leisure",
+                "Arts, Culture & Entertainment", "Business", "News & Politics", "Human interests", "Environmental "
+                                                                                                   "issue & "
+                                                                                                   "Environmental "
+                                                                                                   "pollution"]
 sentiment_labels = ["POSITIVE", "NEUTRAL", "NEGATIVE"]
 
 lda_model_articles_bbc = None
@@ -137,6 +140,7 @@ def topic_extraction(text, data):
             topics.append([topic_labels[el[0]], round((el[1] * 100), 2)])
         topics = sorted(topics, key=lambda x: x[1], reverse=True)
 
+        # show_topics_list(lda_model)
         return topics[0]
 
     else:
@@ -148,13 +152,13 @@ def topic_extraction(text, data):
 
 
 def show_topics_list(lda_model):
-    for i, topic in lda_model.show_topics(formatted=True, num_topics=10, num_words=20):
+    for i, topic in lda_model.show_topics(formatted=True, num_topics=10, num_words=30):
         print(str(i) + ": " + topic)
     print()
 
 
 def show_topics(lda_model, dictionary, tokens):
-    topics = lda_model.show_topics(formatted=True, num_topics=10, num_words=20)
+    topics = lda_model.show_topics(formatted=True, num_topics=10, num_words=30)
     print(
         pd.DataFrame(
             [(el[0], round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary.doc2bow(tokens)]],
@@ -162,6 +166,6 @@ def show_topics(lda_model, dictionary, tokens):
 
 
 def topics_list(lda_model, dictionary, tokens):
-    topics = lda_model.show_topics(formatted=True, num_topics=10, num_words=20)
+    topics = lda_model.show_topics(formatted=True, num_topics=10, num_words=30)
     topics = [(round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary.doc2bow(tokens)]]
     return topics

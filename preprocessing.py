@@ -4,6 +4,8 @@ from nltk import pos_tag
 from nltk.corpus import wordnet
 from nltk.corpus import stopwords
 
+stop_words = None
+
 
 def preprocessing_en(text):
     # Word tokenization
@@ -20,9 +22,11 @@ def preprocessing_en(text):
         lemma_list.append(lemma)
 
     # Removing stopwords and punctuation
-    stop_words = stopwords.words("english")
-    with open('stop_words_english.txt') as f:
-        stop_words += (f.read().splitlines())
+    global stop_words
+    if stop_words is None:
+        stop_words = stopwords.words("english")
+        with open('stop_words_english.txt') as f:
+            stop_words += f.read().splitlines()
 
     filtered_lemma_list = []
     for word in lemma_list:
