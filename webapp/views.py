@@ -1,6 +1,7 @@
 import uuid
 
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -116,3 +117,7 @@ def data_analysis_view_all(request):
     table = DataPrediction.objects.all()
     serializer = DataPredictionSerializer(table, many=True)
     return Response(serializer.data)
+
+
+def homepage(request):
+    return render(request, 'Homepage.html')
