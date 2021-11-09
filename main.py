@@ -27,6 +27,14 @@ def analysis(text, audio_file):
 
     sentiment, sentiment_acc, topic, topic_acc = analysis_without_data(text)
 
+    if sentiment_acc <= 50:
+        sentiment = None
+        sentiment_acc = None
+
+    if topic_acc <= 50:
+        topic = None
+        topic_acc = None
+
     return text, sentiment, sentiment_acc, topic, topic_acc
 
 

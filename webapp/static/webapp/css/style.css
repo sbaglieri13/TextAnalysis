@@ -5,19 +5,31 @@
     }
 }
 
-@media screen and (max-width: 1025px) and (orientation: landscape){
+@media screen and (max-width: 1025px) and (orientation: landscape) {
     body {
         background: url(../images/theatre.png) no-repeat fixed;
         background-size: 100% 100%;
     }
 }
 
-@media screen and (min-width: 1025px){
+@media screen and (min-width: 1025px) {
     body {
         background: url(../images/theatre.png) no-repeat fixed;
         background-size: 100% 100%;
     }
 }
 
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    border-radius: 35px;
+    font-size: 12px;
+    text-align: center;
+}
 
-
+.form-button {
+    position: absolute;
+    bottom: 10px;
+    left: 45%;
+}

@@ -12,5 +12,9 @@ urlpatterns = [
     path('data-text-analysis/prediction/<str:pk>/', views.data_analysis_view, name="Data Text Analysis Results"),
     path('data-audio-analysis/prediction/<str:pk>/', views.data_analysis_view, name="Data Audio Analysis Results"),
     path('data-analysis/all-prediction/', views.data_analysis_view_all, name="Data Analysis Results"),
-    path('home', views.homepage)
+
+    # Link webapp
+    path('', views.homepage, name="Homepage"),
+    path('advancedAnalysis/', views.advanced_analysis, name="Advanced Analysis"),
+    path('results_text_analysis', views.results_text_analysis)
 ]

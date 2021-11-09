@@ -10,9 +10,6 @@ from .serializers import PredictionSerializer, DataPredictionSerializer
 from .models import Prediction, DataPrediction
 
 
-# Create your views here.
-
-
 @api_view(['POST'])
 def text_analysis(request):
     input_text = request.POST['text']
@@ -120,4 +117,40 @@ def data_analysis_view_all(request):
 
 
 def homepage(request):
-    return render(request, 'Homepage.html')
+    return render(request, 'homepage.html')
+
+
+def advanced_analysis(request):
+    return render(request, 'advancedAnalysis.html')
+
+
+# REST Post / homepage.html -> input text
+@api_view(['POST'])
+def results_text_analysis(request):
+    input_text = request.POST['text']
+    unique_id = uuid.uuid4()
+
+    text, sentiment, sentiment_acc, topic, topic_acc = main.analysis(input_text, None)
+
+    table = Prediction(
+        id=unique_id,
+        text=text,
+        sentiment=sentiment,
+        sentiment_acc=sentiment_acc,
+        topic=topic,
+        topic_acc=topic_acc
+    )
+    table.save()
+
+    if topic is None:
+        topic_label = "Topic not found"
+    else:
+        topic_label = topic
+
+    if sentiment is None:
+        sentiment_label = "Sentiment not found"
+    else:
+        sentiment_label = sentiment
+
+    context = {'topic': topic_label, 'sentiment': sentiment_label}
+    return render(request, 'homepage.html', context)

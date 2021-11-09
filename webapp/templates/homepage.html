@@ -1,0 +1,123 @@
+<!doctype html>
+
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+
+    <!--Bootstrap CSS and Javascript -->
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/bootstrap-5.1.3/css/bootstrap.css' %}"/>
+    <script type="text/javascript" src="{% static 'webapp/bootstrap-5.1.3/js/bootstrap.js' %}"></script>
+
+    <!-- My CSS file -->
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/style.css' %}">
+
+    <!-- Topics CSS file -->
+    {% if topic == "Arts, Culture & Entertainment" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicArts.css' %}">
+    {% elif topic == "Business" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicBusiness.css' %}">
+    {% elif topic == "Nature - Environment" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicNature.css' %}">
+    {% endif %}
+
+</head>
+
+<body>
+
+{% include 'navbar.html' %}
+
+<main>
+
+
+    <div class="form-button">
+        <!-- Text Insert Button -->
+        <button type="button" class="btn btn-warning btn-circle btn-xl" style="height: 50px; width: 50px"
+                data-bs-toggle="modal" data-bs-target="#textModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793V2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"></path>
+            </svg>
+        </button>
+
+        <!-- Audio Insert Button -->
+        <button type="button" class="btn btn-warning btn-circle btn-xl" style="height: 50px; width: 50px"
+                data-bs-toggle="modal" data-bs-target="#audioModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill"
+                 viewBox="0 0 16 16">
+                <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"></path>
+                <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"></path>
+            </svg>
+        </button>
+
+    </div>
+
+    <!-- Text Insert Modal-->
+    <div class="modal fade" id="textModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+
+                <form action="results_text_analysis" method="POST">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Input text</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <textarea type="text" class="form-control input-lg" name="text"></textarea>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Insert Modal-->
+    <div class="modal fade" id="audioModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Recording audio</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Modal body..
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Calculate</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</main>
+
+
+</body>
+</html>

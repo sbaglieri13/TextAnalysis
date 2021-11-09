@@ -105,7 +105,7 @@ def topic_modelling(data):
     if data is None and not lda_model_articles_bbc:
         topic_modelling_load()
         return lda_model_articles_bbc, dictionary_LDA_articles_bbc
-    elif data is None and lda_model_articles_bbc and lda_model_articles_bbc:
+    elif data is None and lda_model_articles_bbc:
         return lda_model_articles_bbc, dictionary_LDA_articles_bbc
     else:
         data = data.read().decode()
