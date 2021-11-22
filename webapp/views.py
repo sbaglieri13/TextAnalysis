@@ -154,3 +154,35 @@ def results_text_analysis(request):
 
     context = {'topic': topic_label, 'sentiment': sentiment_label}
     return render(request, 'homepage.html', context)
+
+
+# REST Post / homepage.html -> input audio
+@api_view(['POST'])
+def results_audio_analysis(request):
+    audio_data = request.FILES['audio']
+    unique_id = uuid.uuid4()
+
+    text, sentiment, sentiment_acc, topic, topic_acc = main.analysis(None, audio_data)
+
+    table = Prediction(
+        id=unique_id,
+        text=text,
+        sentiment=sentiment,
+        sentiment_acc=sentiment_acc,
+        topic=topic,
+        topic_acc=topic_acc
+    )
+    table.save()
+
+    if topic is None:
+        topic_label = "Topic not found"
+    else:
+        topic_label = topic
+
+    if sentiment is None:
+        sentiment_label = "Sentiment not found"
+    else:
+        sentiment_label = sentiment
+
+    context = {'topic': topic_label, 'sentiment': sentiment_label}
+    return render(request, 'advancedAnalysis.html', context)

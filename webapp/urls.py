@@ -16,5 +16,6 @@ urlpatterns = [
     # Link webapp
     path('', views.homepage, name="Homepage"),
     path('advancedAnalysis/', views.advanced_analysis, name="Advanced Analysis"),
-    path('results_text_analysis', views.results_text_analysis)
+    path('results_text_analysis', views.results_text_analysis),
+    path('results_audio_analysis', views.results_audio_analysis)
 ]
