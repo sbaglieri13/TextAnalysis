@@ -2,8 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('audio-analysis/', views.audio_analysis, name="Text Analysis"),
-    path('text-analysis/', views.text_analysis, name="Audio Analysis"),
+    path('text-analysis/', views.text_analysis, name="Text Analysis"),
+    path('audio-analysis/', views.audio_analysis, name="Audio Analysis"),
     path('text-analysis/prediction/<str:pk>/', views.analysis_view, name="Text Analysis Results"),
     path('audio-analysis/prediction/<str:pk>/', views.analysis_view, name="Audio Analysis Results"),
     path('analysis/all-prediction/', views.analysis_view_all, name="Analysis Results"),

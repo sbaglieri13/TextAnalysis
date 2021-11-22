@@ -11,4 +11,4 @@ class PredictionSerializer(serializers.ModelSerializer):
 class DataPredictionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataPrediction
-        fields = ['text', 'sentiment', 'sentiment_for_sentence', 'topic']
+        fields = ['text', 'sentiment', 'sentiment_acc', 'sentiment_for_sentence', 'topic', 'topic_acc']

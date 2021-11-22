@@ -13,10 +13,14 @@ def analysis_without_data(text):
 
 
 def analysis_with_data(text, data):
-    sentiment = an.sentiment_analysis_en(text)
+    sent = an.sentiment_analysis_en(text)
+    sentiment = sent[0]
+    sentiment_acc = sent[1]
     sentiment_for_sent = an.sentiment_analysis_en_for_sentence(text)
     topics = an.topic_extraction(text, data)
-    return sentiment, sentiment_for_sent, topics
+    topic = topics[0][1]
+    topic_acc = topics[0][0]
+    return sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc
 
 
 def analysis(text, audio_file):
@@ -44,6 +48,15 @@ def data_analysis(text, audio_file, data):
     elif text is None:
         text = sr.run(audio_file)
 
-    sentiment, sentiment_for_sent, topics = analysis_with_data(text, data)
+    sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc = analysis_with_data(text, data)
+    topic_acc = round(topic_acc*100, 2)
 
-    return text, sentiment, sentiment_for_sent, topics
+    if sentiment_acc <= 50:
+        sentiment = None
+        sentiment_acc = None
+
+    if topic_acc <= 50:
+        topic = None
+        topic_acc = None
+
+    return text, sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc
