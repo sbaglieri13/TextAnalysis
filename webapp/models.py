@@ -14,7 +14,7 @@ class Prediction(models.Model):
     topic_acc = models.FloatField(null=True)
 
     def __str__(self):
-        return '__all__'
+        return self.text
 
 
 class DataPrediction(models.Model):
@@ -27,4 +27,4 @@ class DataPrediction(models.Model):
     topic_acc = models.FloatField(null=True)
 
     def __str__(self):
-        return '__all__'
+        return self.text
