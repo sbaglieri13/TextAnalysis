@@ -19,6 +19,14 @@ def analysis_with_data(text, data):
     sentiment_for_sent = an.sentiment_analysis_en_for_sentence(text)
     topics = an.topic_extraction(text, data)
     topic = topics[0][1]
+
+    chars = "0123456789+*.\"\\"
+    for c in chars:
+        topic = topic.replace(c, "")
+
+    topic = " ".join(topic.split())
+    topic = topic.replace(" ", " - ")
+
     topic_acc = topics[0][0]
     return sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc
 
@@ -49,7 +57,7 @@ def data_analysis(text, audio_file, data):
         text = sr.run(audio_file)
 
     sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc = analysis_with_data(text, data)
-    topic_acc = round(topic_acc*100, 2)
+    topic_acc = round(topic_acc * 100, 2)
 
     if sentiment_acc <= 50:
         sentiment = None
