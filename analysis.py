@@ -62,9 +62,11 @@ def sentiment_analysis_en_for_sentence(text):
         sentiment = sia.polarity_scores(sent)
         score = [sentiment['pos'], sentiment['neu'], sentiment['neg']]
         sentiment_label = sentiment_labels[score.index(max(score))]
-        sentiment_label_for_sent.append([sent, sentiment_label, (round(max(score), 2) * 100)])
+        sentiment_label_for_sent.append([sent, sentiment_label, (round(max(score) * 100, 2))])
 
-    return sentiment_label_for_sent
+    sentiment_label_for_sent_str = str(sentiment_label_for_sent)
+    sentiment_label_for_sent_str = sentiment_label_for_sent_str[1:-1]
+    return sentiment_label_for_sent_str
 
 
 def topic_modelling_load():

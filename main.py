@@ -25,7 +25,7 @@ def analysis_with_data(text, data):
         topic = topic.replace(c, "")
 
     topic = " ".join(topic.split())
-    topic = topic.replace(" ", " - ")
+    topic = topic.replace(" ", " || ")
 
     topic_acc = topics[0][0]
     return sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc
