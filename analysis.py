@@ -168,4 +168,5 @@ def show_topics(lda_model, dictionary, tokens):
 def topics_list(lda_model, dictionary, tokens):
     topics = lda_model.show_topics(formatted=True, num_topics=10, num_words=30)
     topics = [(round(el[1], 2), topics[el[0]][1]) for el in lda_model[dictionary.doc2bow(tokens)]]
+    topics = sorted(topics, key=lambda x: x[0], reverse=True)
     return topics
