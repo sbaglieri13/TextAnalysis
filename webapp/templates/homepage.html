@@ -19,10 +19,13 @@
     <!-- Topics CSS file -->
     {% if topic == "Arts, Culture & Entertainment" %}
     <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicArts.css' %}">
-    {% elif topic == "Business" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicBusiness.css' %}">
+    <audio src="{% static 'webapp/audio/arts and culture.m4a' %}" autoplay loop="true"></audio>
+    {% elif topic == "News & Politics" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicNews.css' %}">
+    <audio src="{% static 'webapp/audio/news.m4a' %}" autoplay loop="true"></audio>
     {% elif topic == "Nature - Environment" %}
     <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicNature.css' %}">
+    <audio src="{% static 'webapp/audio/nature.m4a' %}" autoplay loop="true"></audio>
     {% endif %}
 
 </head>
@@ -119,10 +122,7 @@
         </div>
     </div>
 
-
-
 </main>
-
 
 </body>
 </html>
