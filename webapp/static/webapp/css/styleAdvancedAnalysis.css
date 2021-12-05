@@ -1,0 +1,35 @@
+body {
+    background: url(../images/black-background.jpg) no-repeat fixed;
+    background-size: 100% 100%;
+}
+
+.btn-xl {
+    width: 250px;
+    height: 250px;
+    padding: 10px 16px;
+    border-radius: 35px;
+    font-size: 50px;
+    text-align: center;
+}
+
+@media screen and (max-width: 1025px) and (orientation: landscape) {
+    .btn-xl {
+        width: 180px;
+        height: 180px;
+        padding: 10px 16px;
+        border-radius: 35px;
+        font-size: 50px;
+        text-align: center;
+    }
+}
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 48%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+

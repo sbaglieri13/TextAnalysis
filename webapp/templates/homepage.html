@@ -62,27 +62,28 @@
 
     <!-- Text Insert Modal-->
     <div class="modal fade" id="textModal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form action="results_text_analysis" method="POST">
+                <form action="results_text_analysis" method="POST" enctype="multipart/form-data">
 
                     <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Input text</h4>
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100">TEXT ANALYSIS</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
                     <!-- Modal body -->
                     <div class="modal-body">
                         {% csrf_token %}
-                        <textarea type="text" class="form-control input-lg" name="text"></textarea>
+                        <label for="text-area" class="form-label"><h5>Insert text to analyze</h5></label>
+                        <textarea type="text" id="text-area" class="form-control input-lg" name="text"></textarea>
                     </div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Calculate</button>
+                        <button type="submit" class="btn btn-success">Run</button>
                     </div>
 
                 </form>
@@ -93,27 +94,27 @@
 
     <!-- Audio Insert Modal-->
     <div class="modal fade" id="audioModal">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form action="results_audio_analysis" method="POST">
+                <form action="results_audio_analysis" method="POST" enctype="multipart/form-data">
 
                     <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Record audio</h4>
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100">SPEECH ANALYSIS</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
                     <!-- Modal body -->
                     <div class="modal-body">
                         {% csrf_token %}
-
+                        <label for="audio-rec-area" class="form-label"><h5>Record audio to analyze</h5></label>
                     </div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Calculate</button>
+                        <button type="submit" class="btn btn-success">Run</button>
                     </div>
 
                 </form>

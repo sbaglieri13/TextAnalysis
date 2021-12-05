@@ -25,10 +25,12 @@ def analysis_with_data(text, data):
         topic = topic.replace(c, "")
 
     topic = " ".join(topic.split())
-    topic = topic.replace(" ", " || ")
+    topic = topic.replace(" ", "  -  ")
 
     topic_acc = topics[0][0]
-    return sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc
+    sent_score = sent[2]
+
+    return sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc, sent_score
 
 
 def analysis(text, audio_file):
@@ -56,7 +58,7 @@ def data_analysis(text, audio_file, data):
     elif text is None:
         text = sr.run(audio_file)
 
-    sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc = analysis_with_data(text, data)
+    sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc, sent_score = analysis_with_data(text, data)
     topic_acc = round(topic_acc * 100, 2)
 
     if sentiment_acc <= 50:
@@ -67,4 +69,4 @@ def data_analysis(text, audio_file, data):
         topic = None
         topic_acc = None
 
-    return text, sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc
+    return text, sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc, sent_score

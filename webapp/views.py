@@ -121,6 +121,8 @@ def data_analysis_view_all(request):
     return Response(serializer.data)
 
 
+# Webapp views
+
 def homepage(request):
     return render(request, 'homepage.html')
 
@@ -129,7 +131,7 @@ def advanced_analysis(request):
     return render(request, 'advancedAnalysis.html')
 
 
-# REST Post / homepage.html -> input text
+# REST POST / homepage.html -> input text
 @api_view(['POST'])
 def results_text_analysis(request):
     input_text = request.POST['text']
@@ -161,7 +163,7 @@ def results_text_analysis(request):
     return render(request, 'homepage.html', context)
 
 
-# REST Post / homepage.html -> input audio
+# REST POST / homepage.html -> input audio
 @api_view(['POST'])
 def results_audio_analysis(request):
     audio_data = request.FILES['audio']
@@ -180,14 +182,54 @@ def results_audio_analysis(request):
     table.save()
 
     if topic is None:
-        topic_label = "Topic not found"
-    else:
-        topic_label = topic
+        topic = "Topic not found"
 
     if sentiment is None:
-        sentiment_label = "Sentiment not found"
-    else:
-        sentiment_label = sentiment
+        sentiment = "Sentiment not found"
 
-    context = {'topic': topic_label, 'sentiment': sentiment_label}
-    return render(request, 'advancedAnalysis.html', context)
+    context = {'topic': topic, 'sentiment': sentiment}
+    return render(request, 'homepage.html', context)
+
+
+# REST POST / advancedAnalysis.html -> input text
+def results_data_text_analysis(request):
+    input_text = request.POST['text']
+    input_data = request.FILES['data']
+    unique_id = uuid.uuid4()
+
+    text, sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc, sent_score = main.data_analysis(input_text,
+                                                                                                          None,
+                                                                                                          input_data)
+
+    sentiment_label_for_sent_str = str(sentiment_for_sent)
+    sentiment_label_for_sent_str = sentiment_label_for_sent_str[1:-1]
+
+    table = DataPrediction(
+        id=unique_id,
+        text=text,
+        sentiment=sentiment,
+        sentiment_acc=sentiment_acc,
+        sentiment_for_sentence=sentiment_label_for_sent_str,
+        topic=topic,
+        topic_acc=topic_acc
+    )
+    table.save()
+
+    sentiment_pos = round(sent_score[0], 2)
+    sentiment_neu = round(sent_score[1], 2)
+    sentiment_neg = round(sent_score[2], 2)
+
+    if topic is None:
+        topic = "Topic not found"
+        topic_acc = ""
+    else:
+        topic_acc = str(topic_acc) + " %"
+
+    if sentiment is None:
+        sentiment_pos = 0
+        sentiment_neu = 0
+        sentiment_neg = 0
+
+    context = {'text': text, 'topic': topic, 'topic_acc': topic_acc, 'sentiment_pos': sentiment_pos,
+               'sentiment_neu': sentiment_neu, 'sentiment_neg': sentiment_neg, 'sentiment_for_sent': sentiment_for_sent, 'data': input_data}
+    return render(request, 'results.html', context)
