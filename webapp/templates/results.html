@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 {% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -148,7 +148,7 @@
                     data: {
                         labels: ["Positive", "Neutral", "Negative"],
                         datasets: [{
-                            backgroundColor: ["#23C100", "#CCCCFF", "#FF3600"],
+                            backgroundColor: ["#23c100", "#c0c0c0", "#ff3600"],
                             data: ["{{sentiment_pos}}", "{{sentiment_neu}}", "{{sentiment_neg}}"]
                         }]
                     },

@@ -37,7 +37,7 @@ def analysis(text, audio_file):
     if audio_file is None:
         text = "".join(text)
     elif text is None:
-        text = sr.run(audio_file)
+        text = sr.transcribe_audio(audio_file)
 
     sentiment, sentiment_acc, topic, topic_acc = analysis_without_data(text)
 
@@ -56,7 +56,7 @@ def data_analysis(text, audio_file, data):
     if audio_file is None:
         text = "".join(text)
     elif text is None:
-        text = sr.run(audio_file)
+        text = sr.transcribe_audio(audio_file)
 
     sentiment, sentiment_acc, sentiment_for_sent, topic, topic_acc, sent_score = analysis_with_data(text, data)
     topic_acc = round(topic_acc * 100, 2)

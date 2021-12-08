@@ -1,7 +1,7 @@
 <!doctype html>
 
 {% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -32,7 +32,26 @@
 
 <body>
 
-{% include 'navbar.html' %}
+<div class="navbar-fixed-top">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark" style="z-index: 1">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><b>HOME</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/advancedAnalysis"><b>ADVANCED ANALYSIS</b></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
 
 <main>
 
@@ -65,7 +84,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form action="results_text_analysis" method="POST" enctype="multipart/form-data">
+                <form action="results_analysis" method="POST" enctype="multipart/form-data">
 
                     <!-- Modal Header -->
                     <div class="modal-header text-center">
@@ -76,7 +95,7 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         {% csrf_token %}
-                        <label for="text-area" class="form-label"><h5>Insert text to analyze</h5></label>
+                        <label for="text-area" class="form-label">Insert text to analyze</label>
                         <textarea type="text" id="text-area" class="form-control input-lg" name="text"></textarea>
                     </div>
 
@@ -92,12 +111,12 @@
         </div>
     </div>
 
-    <!-- Audio Insert Modal-->
+    <!-- Audio Record Modal-->
     <div class="modal fade" id="audioModal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form action="results_audio_analysis" method="POST" enctype="multipart/form-data">
+                <form action="results_analysis" method="POST" enctype="multipart/form-data">
 
                     <!-- Modal Header -->
                     <div class="modal-header text-center">
@@ -106,15 +125,20 @@
                     </div>
 
                     <!-- Modal body -->
-                    <div class="modal-body">
+                    <div class="modal-body text-center">
                         {% csrf_token %}
-                        <label for="audio-rec-area" class="form-label"><h5>Record audio to analyze</h5></label>
+                        <p>Click on the button to record the audio and wait the end of the analysis</p>
+                        <button type="submit" name="record" class="btn btn-outline-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-record-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                            </svg>
+                            Record
+                        </button>
                     </div>
-
-                    <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Run</button>
                     </div>
 
                 </form>

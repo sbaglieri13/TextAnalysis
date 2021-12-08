@@ -11,6 +11,7 @@
     <orderEntry type="library" name="chart.js" level="application" />
     <orderEntry type="library" name="Chart.js" level="application" />
     <orderEntry type="library" name="loader" level="application" />
+    <orderEntry type="library" name="recorder" level="application" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="removeUnused" value="true" />

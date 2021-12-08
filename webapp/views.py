@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 import main
+import speechRecognition as sr
 from .serializers import PredictionSerializer, DataPredictionSerializer
 from .models import Prediction, DataPrediction
 
@@ -131,10 +132,16 @@ def advanced_analysis(request):
     return render(request, 'advancedAnalysis.html')
 
 
-# REST POST / homepage.html -> input text
+# REST POST / homepage.html
 @api_view(['POST'])
-def results_text_analysis(request):
-    input_text = request.POST['text']
+def results_analysis(request):
+    if 'record' in request.POST:
+        input_text = sr.record()
+        if input_text is None:
+            return render(request, 'homepage.html')
+    else:
+        input_text = request.POST['text']
+
     unique_id = uuid.uuid4()
 
     text, sentiment, sentiment_acc, topic, topic_acc = main.analysis(input_text, None)
@@ -163,37 +170,16 @@ def results_text_analysis(request):
     return render(request, 'homepage.html', context)
 
 
-# REST POST / homepage.html -> input audio
+# REST POST / advancedAnalysis.html
 @api_view(['POST'])
-def results_audio_analysis(request):
-    audio_data = request.FILES['audio']
-    unique_id = uuid.uuid4()
+def results_data_analysis(request):
+    if 'record' in request.POST:
+        input_text = sr.record()
+        if input_text is None:
+            return render(request, 'advancedAnalysis.html')
+    else:
+        input_text = request.POST['text']
 
-    text, sentiment, sentiment_acc, topic, topic_acc = main.analysis(None, audio_data)
-
-    table = Prediction(
-        id=unique_id,
-        text=text,
-        sentiment=sentiment,
-        sentiment_acc=sentiment_acc,
-        topic=topic,
-        topic_acc=topic_acc
-    )
-    table.save()
-
-    if topic is None:
-        topic = "Topic not found"
-
-    if sentiment is None:
-        sentiment = "Sentiment not found"
-
-    context = {'topic': topic, 'sentiment': sentiment}
-    return render(request, 'homepage.html', context)
-
-
-# REST POST / advancedAnalysis.html -> input text
-def results_data_text_analysis(request):
-    input_text = request.POST['text']
     input_data = request.FILES['data']
     unique_id = uuid.uuid4()
 
@@ -231,5 +217,5 @@ def results_data_text_analysis(request):
         sentiment_neg = 0
 
     context = {'text': text, 'topic': topic, 'topic_acc': topic_acc, 'sentiment_pos': sentiment_pos,
-               'sentiment_neu': sentiment_neu, 'sentiment_neg': sentiment_neg, 'sentiment_for_sent': sentiment_for_sent, 'data': input_data}
+               'sentiment_neu': sentiment_neu, 'sentiment_neg': sentiment_neg, 'sentiment_for_sent': sentiment_for_sent}
     return render(request, 'results.html', context)
