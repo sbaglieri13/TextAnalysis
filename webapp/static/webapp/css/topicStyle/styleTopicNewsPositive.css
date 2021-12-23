@@ -1,0 +1,20 @@
+@media screen and (max-width: 1025px) {
+    body {
+        background: url(../../images/sentPos/theatre-mobile.png) no-repeat fixed, url(../../images/sentPos/news-mobile.jpg) no-repeat fixed;
+        background-size: 100% 100%;
+    }
+}
+
+@media screen and (max-width: 1025px) and (orientation: landscape) {
+    body {
+        background: url(../../images/sentPos/theatre.png) no-repeat fixed, url(../../images/sentPos/news.jpg) no-repeat fixed;
+        background-size: 100% 100%;
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    body {
+        background: url(../../images/sentPos/theatre.png) no-repeat fixed, url(../../images/sentPos/news.jpg) no-repeat fixed;
+        background-size: 100% 100%;
+    }
+}

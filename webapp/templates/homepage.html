@@ -17,15 +17,35 @@
     <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/style.css' %}">
 
     <!-- Topics CSS file -->
-    {% if topic == "Arts, Culture & Entertainment" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicArts.css' %}">
+    {% if topic == "Arts, Culture & Entertainment" and sentiment == "POSITIVE" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicArtsPositive.css' %}">
     <audio src="{% static 'webapp/audio/arts and culture.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "News & Politics" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicNews.css' %}">
-    <audio src="{% static 'webapp/audio/news.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "Nature - Environment" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleTopicNature.css' %}">
+    {% elif topic == "Arts, Culture & Entertainment" and sentiment == "NEUTRAL" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicArtsNeutral.css' %}">
+    <audio src="{% static 'webapp/audio/arts and culture.m4a' %}" autoplay loop="true"></audio>
+    {% elif topic == "Arts, Culture & Entertainment" and sentiment == "NEGATIVE" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicArtsNegative.css' %}">
+    <audio src="{% static 'webapp/audio/arts and culture tense.m4a' %}" autoplay loop="true"></audio>
+
+    {% elif topic == "Nature - Environment" and sentiment == "POSITIVE" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNaturePositive.css' %}">
     <audio src="{% static 'webapp/audio/nature.m4a' %}" autoplay loop="true"></audio>
+    {% elif topic == "Nature - Environment" and sentiment == "NEUTRAL" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNatureNeutral.css' %}">
+    <audio src="{% static 'webapp/audio/nature.m4a' %}" autoplay loop="true"></audio>
+    {% elif topic == "Nature - Environment" and sentiment == "NEGATIVE" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNatureNegative.css' %}">
+    <audio src="{% static 'webapp/audio/nature tense.m4a' %}" autoplay loop="true"></audio>
+
+    {% elif topic == "News & Politics" and sentiment == "POSITIVE" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNewsPositive.css' %}">
+    <audio src="{% static 'webapp/audio/news.m4a' %}" autoplay loop="true"></audio>
+    {% elif topic == "News & Politics" and sentiment == "NEUTRAL" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNewsNeutral.css' %}">
+    <audio src="{% static 'webapp/audio/news.m4a' %}" autoplay loop="true"></audio>
+    {% elif topic == "News & Politics" and sentiment == "NEGATIVE" %}
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNewsNegative.css' %}">
+    <audio src="{% static 'webapp/audio/news.m4a' %}" autoplay loop="true"></audio>
     {% endif %}
 
 </head>
