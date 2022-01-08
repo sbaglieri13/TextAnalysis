@@ -27,13 +27,13 @@
     <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicArtsNegative.css' %}">
     <audio src="{% static 'webapp/audio/arts and culture tense.m4a' %}" autoplay loop="true"></audio>
 
-    {% elif topic == "Nature - Environment" and sentiment == "POSITIVE" %}
+    {% elif topic == "Nature - Environment" or topic == "Environmental issue & Environmental pollution" and sentiment == "POSITIVE" %}
     <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNaturePositive.css' %}">
     <audio src="{% static 'webapp/audio/nature.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "Nature - Environment" and sentiment == "NEUTRAL" %}
+    {% elif topic == "Nature - Environment" or topic == "Environmental issue & Environmental pollution" and sentiment == "NEUTRAL" %}
     <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNatureNeutral.css' %}">
     <audio src="{% static 'webapp/audio/nature.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "Nature - Environment" and sentiment == "NEGATIVE" %}
+    {% elif topic == "Nature - Environment" or topic == "Environmental issue & Environmental pollution" and sentiment == "NEGATIVE" %}
     <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNatureNegative.css' %}">
     <audio src="{% static 'webapp/audio/nature tense.m4a' %}" autoplay loop="true"></audio>
 
