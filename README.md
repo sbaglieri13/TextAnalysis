@@ -67,4 +67,4 @@ The web interface provides visual feedback based on the analyzed sentiment and t
 
 ## Feedback and Contributions
 
-We welcome feedback and contributions from the community. If you have any suggestions or would like to contribute to the project, please open an issue or submit a pull request on our [GitHub repository](https://github.com/sbaglieri13/TextAnalysis).
+I welcome feedback and contributions from the community. If you have any suggestions or would like to contribute to the project, please open an issue or submit a pull request on my [GitHub repository](https://github.com/sbaglieri13/TextAnalysis).
