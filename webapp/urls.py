@@ -1,21 +1,17 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+
 from . import views
 
-urlpatterns = [
-    path('text-analysis/', views.text_analysis, name="Text Analysis"),
-    path('audio-analysis/', views.audio_analysis, name="Audio Analysis"),
-    path('text-analysis/prediction/<str:pk>/', views.analysis_view, name="Text Analysis Results"),
-    path('audio-analysis/prediction/<str:pk>/', views.analysis_view, name="Audio Analysis Results"),
-    path('analysis/all-prediction/', views.analysis_view_all, name="Analysis Results"),
-    path('data-text-analysis/', views.data_text_analysis, name="Text Analysis With Data"),
-    path('data-audio-analysis/', views.data_audio_analysis, name="Audio Analysis With Data"),
-    path('data-text-analysis/prediction/<str:pk>/', views.data_analysis_view, name="Data Text Analysis Results"),
-    path('data-audio-analysis/prediction/<str:pk>/', views.data_analysis_view, name="Data Audio Analysis Results"),
-    path('data-analysis/all-prediction/', views.data_analysis_view_all, name="Data Analysis Results"),
+router = DefaultRouter()
+router.register("analyses", views.AnalysisViewSet, basename="analysis")
 
+urlpatterns = [
+    path("api/", include(router.urls)),
+    path("api/health/", views.health, name="health"),
     # Link webapp
-    path('', views.homepage, name="Homepage"),
-    path('advancedAnalysis/', views.advanced_analysis, name="Advanced Analysis"),
-    path('results_analysis', views.results_analysis),
-    path('advancedAnalysis/results_data_analysis', views.results_data_analysis)
+    path("", views.homepage, name="homepage"),
+    path("results_analysis", views.analyze, name="analyze"),
+    path("advancedAnalysis/", views.advanced_analysis, name="advanced-analysis"),
+    path("advancedAnalysis/results_data_analysis", views.advanced_results, name="advanced-results"),
 ]

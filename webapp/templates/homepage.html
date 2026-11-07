@@ -10,71 +10,29 @@
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
     <!--Bootstrap CSS and Javascript -->
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/bootstrap-5.1.3/css/bootstrap.css' %}"/>
-    <script type="text/javascript" src="{% static 'webapp/bootstrap-5.1.3/js/bootstrap.js' %}"></script>
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/bootstrap-5.1.3/css/bootstrap.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'webapp/bootstrap-5.1.3/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- My CSS file -->
     <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/style.css' %}">
 
     <!-- Topics CSS file -->
-    {% if topic == "Arts, Culture & Entertainment" and sentiment == "POSITIVE" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicArtsPositive.css' %}">
-    <audio src="{% static 'webapp/audio/arts and culture.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "Arts, Culture & Entertainment" and sentiment == "NEUTRAL" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicArtsNeutral.css' %}">
-    <audio src="{% static 'webapp/audio/arts and culture.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "Arts, Culture & Entertainment" and sentiment == "NEGATIVE" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicArtsNegative.css' %}">
-    <audio src="{% static 'webapp/audio/arts and culture tense.m4a' %}" autoplay loop="true"></audio>
-
-    {% elif topic == "Nature - Environment" or topic == "Environmental issue & Environmental pollution" and sentiment == "POSITIVE" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNaturePositive.css' %}">
-    <audio src="{% static 'webapp/audio/nature.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "Nature - Environment" or topic == "Environmental issue & Environmental pollution" and sentiment == "NEUTRAL" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNatureNeutral.css' %}">
-    <audio src="{% static 'webapp/audio/nature.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "Nature - Environment" or topic == "Environmental issue & Environmental pollution" and sentiment == "NEGATIVE" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNatureNegative.css' %}">
-    <audio src="{% static 'webapp/audio/nature tense.m4a' %}" autoplay loop="true"></audio>
-
-    {% elif topic == "News & Politics" and sentiment == "POSITIVE" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNewsPositive.css' %}">
-    <audio src="{% static 'webapp/audio/news.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "News & Politics" and sentiment == "NEUTRAL" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNewsNeutral.css' %}">
-    <audio src="{% static 'webapp/audio/news.m4a' %}" autoplay loop="true"></audio>
-    {% elif topic == "News & Politics" and sentiment == "NEGATIVE" %}
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/topicStyle/styleTopicNewsNegative.css' %}">
-    <audio src="{% static 'webapp/audio/news.m4a' %}" autoplay loop="true"></audio>
+    {% if scene %}
+    <link type="text/css" rel="stylesheet" href="{% static scene.css %}">
+    <audio src="{% static scene.audio %}" autoplay loop="true"></audio>
     {% endif %}
 
 </head>
 
 <body>
 
-<div class="navbar-fixed-top">
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg bg-dark navbar-dark" style="z-index: 1">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/"><b>HOME</b></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/advancedAnalysis"><b>ADVANCED ANALYSIS</b></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</div>
+{% include "partials/navbar.html" with navbar_class="bg-dark" %}
 
 <main>
 
+    {% if error %}
+    <div class="error-alert alert alert-danger text-center" role="alert">{{ error }}</div>
+    {% endif %}
 
     <div class="form-button-text">
         <!-- Text Insert Button -->
@@ -104,7 +62,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form action="results_analysis" method="POST" enctype="multipart/form-data">
+                <form action="{% url 'analyze' %}" method="POST" enctype="multipart/form-data">
 
                     <!-- Modal Header -->
                     <div class="modal-header text-center">
@@ -116,7 +74,7 @@
                     <div class="modal-body">
                         {% csrf_token %}
                         <label for="text-area" class="form-label">Insert text to analyze</label>
-                        <textarea type="text" id="text-area" class="form-control input-lg" name="text"></textarea>
+                        <textarea type="text" id="text-area" class="form-control input-lg" name="text" required></textarea>
                     </div>
 
                     <!-- Modal footer -->
@@ -136,7 +94,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form action="results_analysis" method="POST" enctype="multipart/form-data">
+                <form action="{% url 'analyze' %}" method="POST" enctype="multipart/form-data" data-recorder>
 
                     <!-- Modal Header -->
                     <div class="modal-header text-center">
@@ -147,15 +105,7 @@
                     <!-- Modal body -->
                     <div class="modal-body text-center">
                         {% csrf_token %}
-                        <p>Click on the button to record the audio and wait the end of the analysis</p>
-                        <button type="submit" name="record" class="btn btn-outline-danger">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="bi bi-record-circle" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                            </svg>
-                            Record
-                        </button>
+                        {% include "partials/audio_input.html" %}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
@@ -169,5 +119,6 @@
 
 </main>
 
+<script type="text/javascript" src="{% static 'webapp/js/recorder.js' %}"></script>
 </body>
 </html>

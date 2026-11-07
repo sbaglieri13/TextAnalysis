@@ -10,8 +10,8 @@
     <meta name="viewport" content="width = device-width, initial-scale = 1">
 
     <!--Bootstrap CSS and Javascript -->
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/bootstrap-5.1.3/css/bootstrap.css' %}"/>
-    <script type="text/javascript" src="{% static 'webapp/bootstrap-5.1.3/js/bootstrap.js' %}"></script>
+    <link type="text/css" rel="stylesheet" href="{% static 'webapp/bootstrap-5.1.3/css/bootstrap.min.css' %}"/>
+    <script type="text/javascript" src="{% static 'webapp/bootstrap-5.1.3/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- My CSS file -->
     <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleAdvancedAnalysis.css' %}">
@@ -20,31 +20,15 @@
 
 <body>
 
-<div class="navbar-fixed-top">
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg bg-gradient navbar-dark" style="z-index: 1">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/"><b>HOME</b></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/advancedAnalysis"><b>ADVANCED ANALYSIS</b></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</div>
+{% include "partials/navbar.html" %}
 
 <main>
 
     <div class="container">
         <div class="center">
+            {% if error %}
+            <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+            {% endif %}
             <div class="row justify-content-md-center">
 
                 <!-- Text Insert Button -->
@@ -79,7 +63,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
 
-                <form action="results_data_analysis" method="POST" enctype="multipart/form-data">
+                <form action="{% url 'advanced-results' %}" method="POST" enctype="multipart/form-data">
 
                     <!-- Modal Header -->
                     <div class="modal-header text-center">
@@ -91,10 +75,10 @@
                     <div class="modal-body">
                         {% csrf_token %}
                         <label for="text-form" class="form-label">Insert text to analyze</label>
-                        <textarea type="text" id="text-form" class="form-control input-lg" name="text"></textarea>
+                        <textarea type="text" id="text-form" class="form-control input-lg" name="text" required></textarea>
                         <br>
                         <p>Upload data file for analysis (file format: .txt)</p>
-                        <input class="form-control form-control-lg" type="file" name="data">
+                        <input class="form-control form-control-lg" type="file" name="corpus" accept=".txt,text/plain" required>
                     </div>
 
                     <!-- Modal footer -->
@@ -114,7 +98,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
 
-                <form action="results_data_analysis" method="POST" enctype="multipart/form-data">
+                <form action="{% url 'advanced-results' %}" method="POST" enctype="multipart/form-data" data-recorder>
 
                     <!-- Modal Header -->
                     <div class="modal-header text-center">
@@ -135,18 +119,10 @@
                         </div>
                         <br>
                         <p>Upload data file for analysis (file format: .txt)</p>
-                        <input class="form-control form-control-lg" type="file" name="data">
+                        <input class="form-control form-control-lg" type="file" name="corpus" accept=".txt,text/plain" required>
                         <br>
                         <div class="text-center">
-                            <p>Click on the button to record the audio and wait the end of the analysis</p>
-                            <button type="submit" name="record" class="btn btn-outline-danger">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                     class="bi bi-record-circle" viewBox="0 0 16 16">
-                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-                                    <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
-                                </svg>
-                                Record
-                            </button>
+                            {% include "partials/audio_input.html" %}
                         </div>
                     </div>
 
@@ -160,5 +136,7 @@
     </div>
 
 </main>
+
+<script type="text/javascript" src="{% static 'webapp/js/recorder.js' %}"></script>
 </body>
 </html>

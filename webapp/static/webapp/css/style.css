@@ -134,5 +134,11 @@
     }
 }
 
-
-
+.error-alert {
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(90%, 520px);
+    z-index: 2;
+}

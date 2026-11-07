@@ -4,15 +4,16 @@ The goal of this project is to extract useful information such as sentiment and 
 
 ## Features
 
-- **Sentiment Analysis**: Detects the sentiment (positive or negative) of sentences.
+- **Sentiment Analysis**: Detects the sentiment (positive, neutral or negative) of sentences.
 - **Topic Recognition**: Identifies the main topic of sentences.
 - **Unsupervised Learning**: Operates without the need for labeled training data.
 - **Adaptive Settings**: Utilizes sentiment and topic data to influence stage and theater settings.
+- **Speech Input**: Sentences can also be spoken and recorded directly from the browser.
 - **Web Interface**: A user-friendly web interface to demonstrate the capabilities of the software.
 
 ## Requirements
 
-To run this project, you need to have the following dependencies installed:
+The project runs on Python 3.12 and uses the following main dependencies (see `requirements.txt`):
 
 - `django`
 - `django rest framework`
@@ -20,6 +21,8 @@ To run this project, you need to have the following dependencies installed:
 - `gensim`
 - `pandas`
 - `numpy`
+- `langdetect`
+- `SpeechRecognition`
 
 ## Getting Started
 
@@ -39,17 +42,17 @@ Ensure you have [Docker](https://www.docker.com/get-started) installed on your s
 
 2. Build the Docker image:
     ```sh
-    docker build -t webapp .
+    docker build -t textanalysis .
     ```
 
 3. Run the Docker container:
     ```sh
-    docker run -d -p 8000:8000 webapp 
+    docker run -d -p 8000:8000 -e DJANGO_SECRET_KEY=change-me textanalysis
     ```
 
 ## Usage
 
-Once the Docker container is running, access the web interface to start analyzing text for sentiment and topics.
+Once the Docker container is running, open http://localhost:8000 to start analyzing text for sentiment and topics.
 
 ### Web Interface
 
@@ -57,14 +60,10 @@ The web interface provides visual feedback based on the analyzed sentiment and t
 
 #### Output with Topic: Nature and Sentiment: Positive
 <p align='center'>
-<img src="pictures/Web interface nature positive.png" alt="Nature Positive">
+<img src="docs/screenshots/nature-positive.png" alt="Nature Positive">
 </p>
 
 #### Output with Topic: Nature and Sentiment: Negative
 <p align='center'>
-<img src="pictures/Web interface nature negative.png" alt="Nature Negative">
+<img src="docs/screenshots/nature-negative.png" alt="Nature Negative">
 </p>
-
-## Feedback and Contributions
-
-I welcome feedback and contributions from the community. If you have any suggestions or would like to contribute to the project, please open an issue or submit a pull request on my [GitHub repository](https://github.com/sbaglieri13/TextAnalysis).
