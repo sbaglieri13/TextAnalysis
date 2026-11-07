@@ -1,90 +1,81 @@
-<!doctype html>
-
+{% extends "base.html" %}
 {% load static %}
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Advanced Analysis</title>
+{% block title %}Advanced Analysis{% endblock %}
 
-    <meta name="viewport" content="width = device-width, initial-scale = 1">
+{% block styles %}
+<link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleAdvancedAnalysis.css' %}">
+{% endblock %}
 
-    <!--Bootstrap CSS and Javascript -->
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/bootstrap-5.1.3/css/bootstrap.min.css' %}"/>
-    <script type="text/javascript" src="{% static 'webapp/bootstrap-5.1.3/js/bootstrap.bundle.min.js' %}"></script>
+{% block body_class %}page-advanced{% endblock %}
 
-    <!-- My CSS file -->
-    <link type="text/css" rel="stylesheet" href="{% static 'webapp/css/styleAdvancedAnalysis.css' %}">
+{% block content %}
+<main class="advanced-main">
 
-</head>
+    <header class="ta-hero">
+        <p class="ta-eyebrow">Topic modelling on your own data</p>
+        <h1 class="ta-title">Advanced Analysis</h1>
+        <p class="ta-subtitle">
+            Upload a text file: a topic model is trained on it and used to find the topic of your sentence,
+            together with the sentiment of every sentence.
+        </p>
+    </header>
 
-<body>
+    <div class="choice-grid">
+        <!-- Text Insert Button -->
+        <button type="button" class="choice-card" data-bs-toggle="modal" data-bs-target="#textModal">
+            <span class="choice-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-chat-left-text-fill"
+                     viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793V2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"></path>
+                </svg>
+            </span>
+            <span class="choice-title">Text</span>
+            <span class="choice-text">Type a sentence to analyze</span>
+        </button>
 
-{% include "partials/navbar.html" %}
-
-<main>
-
-    <div class="container">
-        <div class="center">
-            {% if error %}
-            <div class="alert alert-danger text-center" role="alert">{{ error }}</div>
-            {% endif %}
-            <div class="row justify-content-md-center">
-
-                <!-- Text Insert Button -->
-                <div class="col-md-auto">
-                    <button type="button" class="btn btn-outline-light btn-xl" data-bs-toggle="modal"
-                            data-bs-target="#textModal" style="margin-bottom:20px">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor"
-                             class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
-                            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793V2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Audio Insert Button -->
-                <div class="col-md-auto">
-                    <button type="button" class="btn btn-outline-light btn-xl" data-bs-toggle="modal"
-                            data-bs-target="#audioModal">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor"
-                             class="bi bi-mic-fill"
-                             viewBox="0 0 16 16">
-                            <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"></path>
-                            <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
+        <!-- Audio Insert Button -->
+        <button type="button" class="choice-card" data-bs-toggle="modal" data-bs-target="#audioModal">
+            <span class="choice-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16"
+                     aria-hidden="true">
+                    <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z"></path>
+                    <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"></path>
+                </svg>
+            </span>
+            <span class="choice-title">Speech</span>
+            <span class="choice-text">Record your voice to analyze</span>
+        </button>
     </div>
 
     <!-- Text Insert Modal-->
-    <div class="modal fade" id="textModal">
-        <div class="modal-dialog modal-xl">
+    <div class="modal fade ta-modal" id="textModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
 
-                <form action="{% url 'advanced-results' %}" method="POST" enctype="multipart/form-data">
+                <form action="{% url 'advanced-results' %}" method="POST" enctype="multipart/form-data" data-loading>
 
                     <!-- Modal Header -->
-                    <div class="modal-header text-center">
-                        <h4 class="modal-title w-100">TEXT ANALYSIS WITH DATA</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Text Analysis with Data</h4>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
 
                     <!-- Modal body -->
                     <div class="modal-body">
                         {% csrf_token %}
                         <label for="text-form" class="form-label">Insert text to analyze</label>
-                        <textarea type="text" id="text-form" class="form-control input-lg" name="text" required></textarea>
-                        <br>
-                        <p>Upload data file for analysis (file format: .txt)</p>
-                        <input class="form-control form-control-lg" type="file" name="corpus" accept=".txt,text/plain" required>
+                        <textarea id="text-form" class="form-control" name="text" rows="4"
+                                  placeholder="Good night, good night! Parting is such sweet sorrow…" required></textarea>
+
+                        <label for="corpus-text" class="form-label mt-4">Upload data file for analysis (file format: .txt)</label>
+                        <input id="corpus-text" class="form-control" type="file" name="corpus" accept=".txt,text/plain" required>
                     </div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Run</button>
+                        <button type="button" class="btn btn-ta-ghost" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-ta">Run</button>
                     </div>
 
                 </form>
@@ -94,41 +85,38 @@
     </div>
 
     <!-- Audio Record Modal-->
-    <div class="modal fade" id="audioModal">
-        <div class="modal-dialog modal-xl">
+    <div class="modal fade ta-modal" id="audioModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
 
                 <form action="{% url 'advanced-results' %}" method="POST" enctype="multipart/form-data" data-recorder>
 
                     <!-- Modal Header -->
-                    <div class="modal-header text-center">
-                        <h4 class="modal-title w-100">SPEECH ANALYSIS WITH DATA</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Speech Analysis with Data</h4>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
 
                     <!-- Modal body -->
                     <div class="modal-body">
                         {% csrf_token %}
-                        <div class="alert alert-warning text-center" role="alert">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                                 class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16"
-                                 role="img" aria-label="Warning:">
+                        <div class="ta-note" role="alert">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                 viewBox="0 0 16 16" aria-hidden="true">
                                 <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                             </svg>
                             <strong>Upload the file before recording audio</strong>
                         </div>
-                        <br>
-                        <p>Upload data file for analysis (file format: .txt)</p>
-                        <input class="form-control form-control-lg" type="file" name="corpus" accept=".txt,text/plain" required>
-                        <br>
-                        <div class="text-center">
-                            {% include "partials/audio_input.html" %}
-                        </div>
+
+                        <label for="corpus-audio" class="form-label">Upload data file for analysis (file format: .txt)</label>
+                        <input id="corpus-audio" class="form-control mb-4" type="file" name="corpus" accept=".txt,text/plain" required>
+
+                        {% include "partials/audio_input.html" %}
                     </div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-ta-ghost" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>
@@ -136,7 +124,8 @@
     </div>
 
 </main>
+{% endblock %}
 
+{% block scripts %}
 <script type="text/javascript" src="{% static 'webapp/js/recorder.js' %}"></script>
-</body>
-</html>
+{% endblock %}

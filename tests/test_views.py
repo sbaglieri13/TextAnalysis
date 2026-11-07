@@ -25,7 +25,7 @@ def test_analyze_text_sets_stage_scene(client, monkeypatch):
 def test_analyze_empty_text_shows_error(client):
     response = client.post("/results_analysis", {"text": "   "})
     assert response.status_code == 400
-    assert b"alert-danger" in response.content
+    assert b"ta-alert" in response.content
 
 
 def test_advanced_results_page(client):

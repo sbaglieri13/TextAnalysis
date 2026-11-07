@@ -78,12 +78,36 @@
         }
     }
 
+    function formatTime(seconds) {
+        const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+        const s = String(seconds % 60).padStart(2, "0");
+        return `${m}:${s}`;
+    }
+
     function setupForm(form) {
+        const container = form.querySelector(".ta-recorder");
         const button = form.querySelector("[data-record-button]");
         const label = form.querySelector("[data-record-label]");
+        const timer = form.querySelector("[data-record-timer]");
         const status = form.querySelector("[data-record-status]");
         const input = form.querySelector("input[name=audio]");
         let recorder = null;
+        let ticker = null;
+
+        const setRecording = (active) => {
+            container.classList.toggle("is-recording", active);
+            button.classList.toggle("is-recording", active);
+            button.setAttribute("aria-label", active ? "Stop" : "Record");
+            label.textContent = active ? "Stop" : "Record";
+            clearInterval(ticker);
+            if (active) {
+                const start = Date.now();
+                timer.textContent = "00:00";
+                ticker = setInterval(() => {
+                    timer.textContent = formatTime(Math.floor((Date.now() - start) / 1000));
+                }, 250);
+            }
+        };
 
         button.addEventListener("click", async () => {
             if (!recorder) {
@@ -100,20 +124,19 @@
                     status.textContent = `Microphone not available (${err.message}).`;
                     return;
                 }
-                label.textContent = "Stop";
-                button.classList.replace("btn-outline-danger", "btn-danger");
-                status.textContent = "Recording... click Stop when you have finished speaking.";
+                status.textContent = "";
+                setRecording(true);
                 return;
             }
 
             const blob = await recorder.stop();
             recorder = null;
+            setRecording(false);
             const transfer = new DataTransfer();
             transfer.items.add(new File([blob], "recording.wav", {type: "audio/wav"}));
             input.files = transfer.files;
             button.disabled = true;
-            label.textContent = "Analyzing...";
-            status.textContent = "";
+            if (window.showLoading) window.showLoading();
             form.submit();
         });
     }

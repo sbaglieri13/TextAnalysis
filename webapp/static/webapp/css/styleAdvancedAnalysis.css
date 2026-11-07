@@ -1,35 +1,94 @@
 body {
-    background: url(../images/black-background.jpg) no-repeat fixed;
+    background:
+        radial-gradient(60% 55% at 50% 0%, rgba(244, 196, 48, 0.16), transparent 70%),
+        radial-gradient(70% 60% at 50% 110%, rgba(179, 18, 27, 0.3), transparent 70%),
+        url(../images/black-background.jpg) no-repeat fixed;
     background-size: 100% 100%;
+    background-attachment: fixed;
 }
 
-.btn-xl {
-    width: 250px;
-    height: 250px;
-    padding: 10px 16px;
-    border-radius: 35px;
-    font-size: 50px;
-    text-align: center;
+.advanced-main {
+    min-height: calc(100vh - 64px);
+    padding-bottom: 4rem;
 }
 
-@media screen and (max-width: 1025px) and (orientation: landscape) {
-    .btn-xl {
-        width: 180px;
-        height: 180px;
-        padding: 10px 16px;
-        border-radius: 35px;
-        font-size: 50px;
-        text-align: center;
+.choice-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.choice-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 260px;
+    height: 260px;
+    padding: 1.5rem;
+    border: 1px solid var(--ta-line-soft);
+    border-radius: 28px;
+    color: var(--ta-text);
+    background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015)),
+        rgba(20, 13, 13, 0.75);
+    box-shadow: var(--ta-shadow);
+    backdrop-filter: blur(8px);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.choice-card:hover,
+.choice-card:focus-visible {
+    transform: translateY(-6px);
+    border-color: var(--ta-gold);
+    box-shadow: var(--ta-shadow), 0 0 40px rgba(244, 196, 48, 0.22);
+}
+
+.choice-icon {
+    display: grid;
+    place-items: center;
+    width: 92px;
+    height: 92px;
+    margin-bottom: 0.6rem;
+    border-radius: 50%;
+    color: #3a1d00;
+    background: radial-gradient(circle at 32% 28%, var(--ta-gold-light), var(--ta-gold) 48%, var(--ta-gold-dark));
+    box-shadow: 0 10px 26px rgba(244, 196, 48, 0.3);
+    transition: transform 0.25s ease;
+}
+
+.choice-card:hover .choice-icon {
+    transform: scale(1.06);
+}
+
+.choice-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+.choice-title {
+    font-family: var(--ta-serif);
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.choice-text {
+    font-size: 0.9rem;
+    color: var(--ta-muted);
+}
+
+@media (max-width: 600px) {
+    .choice-grid {
+        gap: 1.2rem;
+    }
+
+    .choice-card {
+        width: 100%;
+        max-width: 340px;
+        height: auto;
+        padding: 1.6rem;
     }
 }
-
-.center {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 48%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-
-

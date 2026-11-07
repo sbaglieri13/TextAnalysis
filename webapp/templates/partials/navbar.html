@@ -1,20 +1,28 @@
-<div class="navbar-fixed-top">
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg {{ navbar_class|default:'bg-gradient' }} navbar-dark" style="z-index: 1">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'homepage' %}"><b>HOME</b></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'advanced-analysis' %}"><b>ADVANCED ANALYSIS</b></a>
-                    </li>
-                </ul>
-            </div>
+{% load static %}
+{% with page=request.resolver_match.url_name %}
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark ta-navbar">
+    <div class="container-fluid px-3 px-lg-4">
+        <a class="navbar-brand ta-brand" href="{% url 'homepage' %}">
+            <img src="{% static 'webapp/images/favicon.svg' %}" width="30" height="30" alt="">
+            <span>Text Analysis</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar"
+                aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'homepage' or page == 'analyze' %}active{% endif %}"
+                       href="{% url 'homepage' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'advanced-analysis' or page == 'advanced-results' %}active{% endif %}"
+                       href="{% url 'advanced-analysis' %}">Advanced Analysis</a>
+                </li>
+            </ul>
         </div>
-    </nav>
-</div>
+    </div>
+</nav>
+{% endwith %}
